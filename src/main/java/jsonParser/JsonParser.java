@@ -1,6 +1,5 @@
 package jsonParser;
 
-import exception.json.InvalidJsonFormatException;
 import lombok.NonNull;
 
 import java.util.*;
@@ -10,13 +9,11 @@ public class JsonParser implements JsonParserInterface {
 
     private String jsonString;
     private Map<Object, Object> map = new HashMap<>();
-
+    private int counter = 0;
 
     @Override
     public Map<Object, Object> parseJson(@NonNull String json) {
         this.jsonString = json.trim();
-
-        var counter = 0;
 
 //        if ((this.jsonString.charAt(1) != '{' && jsonString.charAt(jsonString.length() - 2) != '}') || (this.jsonString.charAt(1) != '[' && jsonString.charAt(jsonString.length() - 2) != ']')) {
 //            throw new InvalidJsonFormatException("Your Json is not valid");
@@ -26,34 +23,34 @@ public class JsonParser implements JsonParserInterface {
                 break;
             }
             var current = jsonString.charAt(counter++);
-            if (current == ' ' || current == '"' || current == '\n') {
+            if (current == ' ' || current == '\n' || current == ',' || current == '"') {
                 continue;
             }
             if (current == '{') {
-                readObject(counter);
+                readObject();
             }
 
             if (current == '[') {
-                readArray(counter);
+                readArray();
             }
-//                throw new InvalidJsonFormatException(String.format("You have error in your Json %s", counter));
 
+
+//                throw new InvalidJsonFormatException(String.format("You have error in your Json %s", counter));
         }
         return map;
     }
 
-    private void readArray(int counter) {
+    private void readArray() {
         List<Object> list = new ArrayList<>();
         StringBuilder keyBuilder = new StringBuilder();
         while (true) {
             var current = jsonString.charAt(counter++);
-
             if (current == '"') {
                 continue;
             }
-
             if (current == '{') {
-                readObject(counter);
+                readObject();
+                continue;
             }
             if (current == ',') {
                 list.add(keyBuilder.toString());
@@ -63,7 +60,7 @@ public class JsonParser implements JsonParserInterface {
             if (current == ']') {
                 list.add(keyBuilder.toString());
                 keyBuilder.setLength(0);
-                map.put("lista", list);
+                map.put("lista" + counter, list);
                 break;
             }
             keyBuilder.append(current);
@@ -71,14 +68,19 @@ public class JsonParser implements JsonParserInterface {
     }
 
 
-    private void readObject(int counter) {
-
+    private void readObject() {
         StringBuilder keyBuilder = new StringBuilder();
         StringBuilder valueBuilder = new StringBuilder();
         boolean keyOrValue = true;
         while (true) {
             var current = jsonString.charAt(counter++);
 
+            if (current == '[') {
+                keyBuilder.setLength(0);
+                valueBuilder.setLength(0);
+                readArray();
+                continue;
+            }
             if (current == '"') {
                 continue;
             }
@@ -86,7 +88,6 @@ public class JsonParser implements JsonParserInterface {
                 keyOrValue = false;
                 continue;
             }
-
             if (current == ',') {
                 keyOrValue = true;
                 map.put(keyBuilder.toString(), valueBuilder.toString());
@@ -101,8 +102,10 @@ public class JsonParser implements JsonParserInterface {
                 valueBuilder.setLength(0);
                 break;
             }
+
             if (current == '{') {
-                readObject(counter);
+                readObject();
+                continue;
             }
             if (keyOrValue) {
                 keyBuilder.append(current);
