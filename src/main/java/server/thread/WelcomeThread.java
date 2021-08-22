@@ -1,9 +1,7 @@
 package server.thread;
 
-import httpParser.HttpParser;
-import httpParser.HttpParserInterface;
-import httpParser.data.HttpRequest;
-import jsonParser.JsonParser;
+import http_parser.HttpParser;
+import http_parser.HttpParserInterface;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
