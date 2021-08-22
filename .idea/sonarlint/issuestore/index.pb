@@ -3,8 +3,6 @@ q
 Asrc/main/java/exception/http/InvalidHttpRequestLineException.java,3\c\3cdf147ba225a5870b6c997a5984bcfd22e6c8bf
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-l
-<src/main/java/exception/json/InvalidJsonFormatException.java,0\d\0dbbc9372da72867aee5a2faadef72ed6f27cbf7
 a
 1src/main/java/httpParser/HttpParserInterface.java,3\6\36975fccb67a096ad4a368e3e98d3526baa6842f
 p
@@ -19,8 +17,6 @@ Z
 +src/main/java/server/ServerMainHandler.java,f\e\feeb25ae909894d70c00a8b7b94b0ec7a88988de
 a
 1src/main/java/jsonParser/JsonParserInterface.java,9\d\9d3cd202ab55cba97eda74c3b9d9909552cd17e7
-^
-.src/main/java/server/thread/WelcomeThread.java,4\c\4c4d549ecb6b9328220df010367772d728681305
 ^
 .src/main/java/httpParser/data/HttpRequest.java,5\b\5ba1f660eb03014454cab312cae605380a071d85
 P

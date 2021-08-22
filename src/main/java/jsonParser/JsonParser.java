@@ -18,9 +18,9 @@ public class JsonParser implements JsonParserInterface {
 
         var counter = 0;
 
-        if (this.jsonString.charAt(0) != '{' || jsonString.charAt(jsonString.length() - 1) != '}') {
-            throw new InvalidJsonFormatException("Your Json is not valid");
-        }
+//        if ((this.jsonString.charAt(1) != '{' && jsonString.charAt(jsonString.length() - 2) != '}') || (this.jsonString.charAt(1) != '[' && jsonString.charAt(jsonString.length() - 2) != ']')) {
+//            throw new InvalidJsonFormatException("Your Json is not valid");
+//        }
         while (true) {
             if (counter == jsonString.length()) {
                 break;
@@ -61,6 +61,8 @@ public class JsonParser implements JsonParserInterface {
                 continue;
             }
             if (current == ']') {
+                list.add(keyBuilder.toString());
+                keyBuilder.setLength(0);
                 map.put("lista", list);
                 break;
             }
