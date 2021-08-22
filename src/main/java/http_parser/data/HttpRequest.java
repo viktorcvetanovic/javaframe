@@ -1,5 +1,6 @@
 package http_parser.data;
 
+import enums.http.HttpMethod;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class HttpRequest {
     @NoArgsConstructor
     @ToString
     public static final class HttpRequestLine {
-        private String method;
+        private HttpMethod method;
         private String path;
         private String version;
     }

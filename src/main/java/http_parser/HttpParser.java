@@ -1,5 +1,6 @@
 package http_parser;
 
+import enums.http.HttpMethod;
 import exception.http.InvalidHttpRequestLineException;
 import http_parser.data.HttpRequest;
 import http_parser.data.HttpRequest.HttpHeader;
@@ -73,7 +74,14 @@ public class HttpParser implements HttpParserInterface {
         if (array.length == 0) {
             return new HttpRequest.HttpRequestLine();
         }
-        return new HttpRequest.HttpRequestLine(array[0], array[1], array[2]);
+        HttpRequest.HttpRequestLine httpRequestLine = null;
+        try {
+            httpRequestLine = new HttpRequest.HttpRequestLine(HttpMethod.valueOf(array[0]), array[1], array[2]);
+
+        } catch (Exception ex) {
+            throw new InvalidHttpRequestLineException("Your Http Method is not valid");
+        }
+        return httpRequestLine;
     }
 
     private List<HttpHeader> mapHttpJsonFromStringArray(@NonNull String[] array) {
