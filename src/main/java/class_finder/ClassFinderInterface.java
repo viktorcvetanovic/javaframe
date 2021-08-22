@@ -4,5 +4,5 @@ import enums.http.HttpMethod;
 import http_parser.data.HttpRequest;
 
 public interface ClassFinderInterface {
-    void findClassByPathAndMethod(HttpRequest httpRequest);
+    <T> T findClassByPathAndMethod(HttpRequest httpRequest,String packageName);
 }

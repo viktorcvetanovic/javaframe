@@ -33,8 +33,6 @@ public class JsonParser implements JsonParserInterface {
             if (current == '[') {
                 readArray();
             }
-
-
 //                throw new InvalidJsonFormatException(String.format("You have error in your Json %s", counter));
         }
         return map;
