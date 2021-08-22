@@ -58,7 +58,9 @@ public class JsonParser implements JsonParserInterface {
                 continue;
             }
             if (current == ']') {
-                list.add(keyBuilder.toString());
+                if (!keyBuilder.toString().equals("")) {
+                    list.add(keyBuilder.toString());
+                }
                 keyBuilder.setLength(0);
                 map.put("lista" + counter, list);
                 break;

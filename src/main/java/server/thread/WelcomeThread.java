@@ -2,6 +2,7 @@ package server.thread;
 
 import httpParser.HttpParser;
 import httpParser.HttpParserInterface;
+import httpParser.data.HttpRequest;
 import jsonParser.JsonParser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,9 @@ public class WelcomeThread implements Runnable {
             var is = socket.getInputStream();
             byte[] bytes = is.readAllBytes();
             HttpParserInterface httpParser = new HttpParser();
-            System.out.println(httpParser.parse(bytes));
+            var httpRequest=httpParser.parse(bytes);
+
+            System.out.println(httpRequest);
         } catch (IOException e) {
             e.printStackTrace();
         }
