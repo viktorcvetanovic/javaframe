@@ -1,12 +1,24 @@
 package class_finder;
 
-import enums.http.HttpMethod;
+
+import annotations.Controller;
 import http_parser.data.HttpRequest;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+
+import java.util.*;
+
 
 public class ClassFinder implements ClassFinderInterface {
 
     @Override
-    public <T> T findClassByPathAndMethod(HttpRequest httpRequest,String packageName) {
-        return null;
+    public Optional<Class<?>> findClassByPathAndMethod(HttpRequest httpRequest) {
+        String path = httpRequest.getHttpRequestLine().getPath();
+        var reflections = new Reflections("", new SubTypesScanner(false));
+        return reflections.getSubTypesOf(Object.class)
+                .stream()
+                .filter(e -> e.getAnnotation(Controller.class) != null)
+                .filter(e -> path.startsWith(e.getAnnotation(Controller.class).path()))
+                .findFirst();
     }
 }

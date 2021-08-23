@@ -1,8 +1,9 @@
 package class_finder;
 
-import enums.http.HttpMethod;
 import http_parser.data.HttpRequest;
 
+import java.util.Optional;
+
 public interface ClassFinderInterface {
-    <T> T findClassByPathAndMethod(HttpRequest httpRequest,String packageName);
+     Optional<Class<?>> findClassByPathAndMethod(HttpRequest httpRequest);
 }

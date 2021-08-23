@@ -1,6 +1,5 @@
 package server.thread;
 
-import class_finder.ClassFinderFacade;
 import class_finder.ClassFinder;
 import class_finder.ClassFinderInterface;
 import http_parser.HttpParser;
@@ -24,8 +23,8 @@ public class WelcomeThread implements Runnable {
             HttpParserInterface httpParser = new HttpParser();
             var httpRequest = httpParser.parse(bytes);
             ClassFinderInterface classFinderInterface = new ClassFinder();
-            var obj = new ClassFinderFacade(httpRequest).findClassByPathAndMethodForController();
-            System.out.println(httpRequest);
+            var classes = classFinderInterface.findClassByPathAndMethod(httpRequest).get();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

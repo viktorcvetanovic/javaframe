@@ -8,6 +8,5 @@ import java.lang.annotation.*;
 public @interface Controller {
     String path();
 
-    String method();
 
 }
