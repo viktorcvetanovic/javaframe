@@ -1,9 +1,8 @@
-package http_parser;
+package http.http_parser;
 
 import enums.http.HttpMethod;
 import exception.http.InvalidHttpRequestLineException;
-import http_parser.data.HttpRequest;
-import http_parser.data.HttpRequest.HttpHeader;
+import http.data.HttpRequest;
 import json_parser.JsonParser;
 import json_parser.JsonParserInterface;
 import lombok.NonNull;
@@ -84,18 +83,18 @@ public class HttpParser implements HttpParserInterface {
         return httpRequestLine;
     }
 
-    private List<HttpHeader> mapHttpJsonFromStringArray(@NonNull String[] array) {
+    private List<HttpRequest.HttpHeader> mapHttpJsonFromStringArray(@NonNull String[] array) {
         if (array.length == 0)
             return new ArrayList<>() {
             };
         return Arrays.stream(array).map(e ->
-                new HttpHeader(e.split(":")[0], e.split(":")[1])).collect(Collectors.toList());
+                new HttpRequest.HttpHeader(e.split(":")[0], e.split(":")[1])).collect(Collectors.toList());
     }
 
-    private List<HttpHeader> mapMapToHttpHeader(Map<Object, Object> map) {
-        List<HttpHeader> list = new ArrayList<>();
+    private List<HttpRequest.HttpHeader> mapMapToHttpHeader(Map<Object, Object> map) {
+        List<HttpRequest.HttpHeader> list = new ArrayList<>();
         for (Map.Entry entry : map.entrySet()) {
-            list.add(new HttpHeader(String.valueOf(entry.getKey()), String.valueOf(entry.getValue())));
+            list.add(new HttpRequest.HttpHeader(String.valueOf(entry.getKey()), String.valueOf(entry.getValue())));
         }
         return list;
     }

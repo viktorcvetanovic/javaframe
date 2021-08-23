@@ -1,4 +1,4 @@
-package http_parser.data;
+package http.data;
 
 import enums.http.HttpMethod;
 import lombok.AllArgsConstructor;
@@ -10,6 +10,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class HttpRequest {
     private HttpRequestLine httpRequestLine;

@@ -2,7 +2,7 @@ package class_finder;
 
 
 import annotations.Controller;
-import http_parser.data.HttpRequest;
+import http.data.HttpRequest;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 

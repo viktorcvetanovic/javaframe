@@ -1,6 +1,6 @@
 package class_finder;
 
-import http_parser.data.HttpRequest;
+import http.data.HttpRequest;
 
 import java.util.Optional;
 

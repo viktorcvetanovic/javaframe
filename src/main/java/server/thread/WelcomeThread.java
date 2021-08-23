@@ -2,8 +2,8 @@ package server.thread;
 
 import class_finder.ClassFinder;
 import class_finder.ClassFinderInterface;
-import http_parser.HttpParser;
-import http_parser.HttpParserInterface;
+import http.http_parser.HttpParser;
+import http.http_parser.HttpParserInterface;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -23,7 +23,8 @@ public class WelcomeThread implements Runnable {
             HttpParserInterface httpParser = new HttpParser();
             var httpRequest = httpParser.parse(bytes);
             ClassFinderInterface classFinderInterface = new ClassFinder();
-            var classes = classFinderInterface.findClassByPathAndMethod(httpRequest).get();
+            //THROW 404
+            Class<?> classes = classFinderInterface.findClassByPathAndMethod(httpRequest).orElse(null);
 
         } catch (IOException e) {
             e.printStackTrace();
