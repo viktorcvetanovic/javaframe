@@ -25,7 +25,7 @@ public class HttpResponse {
     public String returnHttpToString() {
         return httpVersion + " " + statusCode.getCode() + " " + statusCode.toString() + "\n" +
                 "Date: " + now.toString() + "\n" +
-//                "Content-Length: " + contentLength + "\n" +
-                "Content-Type: " + contentType;
+                "Content-Type: " + contentType + "\n" +
+                "\n" + body;
     }
 }
