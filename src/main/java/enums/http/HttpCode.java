@@ -8,4 +8,8 @@ public enum HttpCode {
 
     public final String code;
 
+    public String getCode() {
+        return code;
+    }
+
 }

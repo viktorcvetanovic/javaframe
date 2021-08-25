@@ -1,5 +1,6 @@
 package http.data;
 
+import enums.http.HttpCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class HttpResponse {
     private final String httpVersion = "HTTP/1.1";
+    private HttpCode statusCode = HttpCode.OK;
     private Integer contentLength = 0;
     private String contentType = "text";
     private LocalDateTime now = LocalDateTime.now();
@@ -21,6 +23,9 @@ public class HttpResponse {
 
 
     public String returnHttpToString() {
-        return null;
+        return httpVersion + " " + statusCode.getCode() + " " + statusCode.toString() + "\n" +
+                "Date: " + now.toString() + "\n" +
+//                "Content-Length: " + contentLength + "\n" +
+                "Content-Type: " + contentType;
     }
 }

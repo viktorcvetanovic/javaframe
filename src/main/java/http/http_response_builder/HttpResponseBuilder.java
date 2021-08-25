@@ -12,7 +12,7 @@ public class HttpResponseBuilder {
 
     public static HttpResponseBuilder getBuilder() {
         HttpResponseBuilder httpResponseBuilder = new HttpResponseBuilder();
-        httpResponseBuilder.httpResponse=new HttpResponse();
+        httpResponseBuilder.httpResponse = new HttpResponse();
         return httpResponseBuilder;
     }
 
@@ -42,6 +42,7 @@ public class HttpResponseBuilder {
     }
 
     public String build() {
-        return httpResponse.toString();
+        System.out.println(httpResponse.returnHttpToString());
+        return httpResponse.returnHttpToString();
     }
 }

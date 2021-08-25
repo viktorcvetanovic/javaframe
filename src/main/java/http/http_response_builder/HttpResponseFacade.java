@@ -9,7 +9,7 @@ public class HttpResponseFacade {
                 .getBuilder()
                 .withContentLength(list.toString().length())
                 .withBody(list)
-                .withContentType("json")
+                .withContentType("application/json")
                 .build();
     }
 
