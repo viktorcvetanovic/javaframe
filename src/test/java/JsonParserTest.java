@@ -1,9 +1,7 @@
 import json_parser.JsonParser;
 import json_parser.JsonParserInterface;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +26,5 @@ public class JsonParserTest {
         assertEquals("viktor", list.get(0));
         assertEquals("car", list.get(1));
     }
-
 
 }
