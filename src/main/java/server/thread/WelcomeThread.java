@@ -2,6 +2,7 @@ package server.thread;
 
 import class_finder.ClassFinder;
 import class_finder.ClassFinderInterface;
+import enums.http.HttpCode;
 import http.http_parser.HttpParser;
 import http.http_parser.HttpParserInterface;
 import http.http_response_builder.HttpResponseFacade;
@@ -40,8 +41,7 @@ public class WelcomeThread implements Runnable {
             System.out.println(classes);
             if (classes == null) {
                 bufferedOutputStream
-                        .write(HttpResponseFacade.getHttpResponseForJson(Arrays.asList(1, 2, 3, 4, 5))
-                                .getBytes(StandardCharsets.UTF_8));
+                        .write(HttpResponseFacade.getHttpResponseFor404().getBytes(StandardCharsets.UTF_8));
                 bufferedOutputStream.flush();
                 bufferedOutputStream.close();
             }

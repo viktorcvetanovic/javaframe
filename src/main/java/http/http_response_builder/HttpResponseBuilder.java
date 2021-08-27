@@ -1,6 +1,7 @@
 package http.http_response_builder;
 
 
+import enums.http.HttpCode;
 import http.data.HttpResponse;
 
 import java.time.LocalDateTime;
@@ -38,6 +39,11 @@ public class HttpResponseBuilder {
 
     public HttpResponseBuilder withBody(List<Object> body) {
         httpResponse.setBody(body);
+        return this;
+    }
+
+    public HttpResponseBuilder withHttpCode(HttpCode httpCode) {
+        httpResponse.setStatusCode(httpCode);
         return this;
     }
 
