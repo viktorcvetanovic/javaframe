@@ -16,3 +16,6 @@ Things that need to be developed:
 
 * Working with Database
 * Security
+
+This is example how you should use framework:
+![alt text](img.png)
