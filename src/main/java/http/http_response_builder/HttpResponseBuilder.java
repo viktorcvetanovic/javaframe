@@ -48,7 +48,7 @@ public class HttpResponseBuilder {
     }
 
     public String build() {
-        System.out.println(httpResponse.returnHttpToString());
+
         return httpResponse.returnHttpToString();
     }
 }

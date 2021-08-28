@@ -3,8 +3,8 @@ package annotations;
 import java.lang.annotation.*;
 
 @Inherited
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Controller {
+public @interface RequestHandler {
     String path();
 }

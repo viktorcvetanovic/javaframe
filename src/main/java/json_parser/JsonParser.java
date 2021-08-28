@@ -1,5 +1,6 @@
 package json_parser;
 
+import exception.json.InvalidJsonFormatException;
 import lombok.NonNull;
 
 import java.util.*;
@@ -15,9 +16,10 @@ public class JsonParser implements JsonParserInterface {
     public Map<Object, Object> parseJson(@NonNull String json) {
         this.jsonString = json.trim();
 
-//        if ((this.jsonString.charAt(1) != '{' && jsonString.charAt(jsonString.length() - 2) != '}') || (this.jsonString.charAt(1) != '[' && jsonString.charAt(jsonString.length() - 2) != ']')) {
-//            throw new InvalidJsonFormatException("Your Json is not valid");
-//        }
+        if ((this.jsonString.charAt(0) != '{' || jsonString.charAt(jsonString.length() - 1) != '}')
+                && (this.jsonString.charAt(0) != '[' || jsonString.charAt(jsonString.length() - 1) != ']')) {
+            throw new InvalidJsonFormatException("Your Json is not valid");
+        }
         while (true) {
             if (counter == jsonString.length()) {
                 break;
