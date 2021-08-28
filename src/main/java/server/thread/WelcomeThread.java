@@ -62,7 +62,6 @@ public class WelcomeThread implements Runnable {
                 }
                 bufferedOutputStream.flush();
                 bufferedOutputStream.close();
-
             }
 
         } catch (IOException e) {
