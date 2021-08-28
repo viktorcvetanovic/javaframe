@@ -1,11 +1,14 @@
 package server;
 
-import config.Config;
+import exception.server.InvalidServerConfigException;
+import lombok.Data;
 import server.thread.WelcomeThread;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,43 @@ public class ServerMainHandler {
         }
     }
 
+    @Data
+    public static final class Config {
+        private static int serverPort;
+        private static InetAddress serverAdress;
+        private static int serverBacklog;
+
+        public static void setServerPort(int port) {
+            serverPort = port;
+        }
+
+
+        public static void setBackLog(int backlog) {
+            serverBacklog = backlog;
+        }
+
+
+        public static void setInetAdress(String inetAdress) {
+            try {
+                serverAdress = InetAddress.getByName(inetAdress);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        public static void setInetAdress(InetAddress inetAdress) {
+            serverAdress = inetAdress;
+        }
+
+        public static ServerSocket getServerSocket() {
+            try {
+                return new ServerSocket(serverPort, serverBacklog, serverAdress);
+            } catch (IOException e) {
+                throw new InvalidServerConfigException("Check your config file for server, some parameters are not valid");
+            }
+        }
+    }
 
 }
 
