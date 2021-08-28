@@ -23,30 +23,35 @@ public class HttpParser implements HttpParserInterface {
         requestString = new String(rawRequest);
         var requestLine = getRequestLine();
         var headerArray = getHeaderArray();
-        String body = getBody();
-        JsonParserInterface jsonParserInterface = new JsonParser();
+        String body = getBody(mapRequestLineFromStringArray(requestLine));
+        if (body != null) {
+            JsonParserInterface jsonParserInterface = new JsonParser();
+            return new HttpRequest(mapRequestLineFromStringArray(requestLine),
+                    mapHttpJsonFromStringArray(headerArray),
+                    mapMapToHttpHeader(jsonParserInterface.parseJson(body)));
+        }
         return new HttpRequest(mapRequestLineFromStringArray(requestLine),
-                mapHttpJsonFromStringArray(headerArray),
-                mapMapToHttpHeader(jsonParserInterface.parseJson(body)));
+                mapHttpJsonFromStringArray(headerArray), null);
     }
 
 
     private String[] getHeaderArray() {
         String[] httpRequest = requestString.split("\r\n");
-        if (checkIfHttpHasBody()) {
-            for (int i = 0; i < httpRequest.length; i++) {
-                var item = httpRequest[i];
-                if (item == null || item.equals("")) {
-                    bodyIndex = i;
-                    return Arrays.copyOfRange(httpRequest, 1, i);
-                }
+        for (int i = 0; i < httpRequest.length; i++) {
+            var item = httpRequest[i];
+            if (item == null || item.equals("")) {
+                bodyIndex = i;
+                return Arrays.copyOfRange(httpRequest, 1, i);
             }
         }
         return Arrays.copyOfRange(httpRequest, 1, httpRequest.length);
     }
 
-    private String getBody() {
-        String[] httpRequest = requestString.split("\r\n");
+    private String getBody(HttpRequest.HttpRequestLine requestLine) {
+        if (requestLine.getMethod() == HttpMethod.GET) {
+            return null;
+        }
+        String[] httpRequest = requestString.split("\r\n\r\n");
         return httpRequest[httpRequest.length - 1];
     }
 
@@ -57,17 +62,6 @@ public class HttpParser implements HttpParserInterface {
         }
         return httpRequestLine;
     }
-
-    private boolean checkIfHttpHasBody() {
-        String[] httpRequest = requestString.split("\r\n");
-        for (String item : httpRequest) {
-            if (item == null || item.equals("") || item.equals("\r\n")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     private HttpRequest.HttpRequestLine mapRequestLineFromStringArray(@NonNull String[] array) {
         if (array.length == 0) {

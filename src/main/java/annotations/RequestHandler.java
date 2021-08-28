@@ -1,5 +1,7 @@
 package annotations;
 
+import enums.http.HttpMethod;
+
 import java.lang.annotation.*;
 
 @Inherited
@@ -7,4 +9,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequestHandler {
     String path();
+
+    HttpMethod method();
 }

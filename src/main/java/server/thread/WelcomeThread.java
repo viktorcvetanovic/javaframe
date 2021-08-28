@@ -53,6 +53,7 @@ public class WelcomeThread implements Runnable {
                             .filter(Objects::nonNull)
                             .filter(e -> e.isAnnotationPresent(RequestHandler.class))
                             .filter(e -> e.getAnnotation(RequestHandler.class).path().equals(classes.getMethodPath()))
+                            .filter(e -> e.getAnnotation(RequestHandler.class).method() == classes.getHttpMethod())
                             .findFirst();
                     if (method.isPresent()) {
                         bufferedOutputStream.write(HttpResponseFacade.getHttpResponseForJson(HttpCode.OK, Arrays.asList(method.get().invoke(controllerInstance))).getBytes());
