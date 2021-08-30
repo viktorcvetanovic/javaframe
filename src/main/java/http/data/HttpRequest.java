@@ -1,6 +1,6 @@
 package http.data;
 
-import enums.http.HttpMethod;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,25 +14,7 @@ import java.util.List;
 @ToString
 public class HttpRequest {
     private HttpRequestLine httpRequestLine;
-    private List<HttpHeader> header;
-    private List<HttpHeader> body;
+    private List<HttpKeyValue> header;
+    private List<HttpKeyValue> body;
 
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @ToString
-    public static final class HttpRequestLine {
-        private HttpMethod method;
-        private String path;
-        private String version;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @ToString
-    public static final class HttpHeader {
-        private String key;
-        private String value;
-    }
 }

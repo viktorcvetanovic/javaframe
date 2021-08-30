@@ -2,7 +2,10 @@ package http.http_parser;
 
 import enums.http.HttpMethod;
 import exception.http.InvalidHttpRequestLineException;
+
+import http.data.HttpKeyValue;
 import http.data.HttpRequest;
+import http.data.HttpRequestLine;
 import json_parser.JsonParser;
 import json_parser.JsonParserInterface;
 import lombok.NonNull;
@@ -47,7 +50,7 @@ public class HttpParser implements HttpParserInterface {
         return Arrays.copyOfRange(httpRequest, 1, httpRequest.length);
     }
 
-    private String getBody(HttpRequest.HttpRequestLine requestLine) {
+    private String getBody(HttpRequestLine requestLine) {
         if (requestLine.getMethod() == HttpMethod.GET) {
             return null;
         }
@@ -63,13 +66,13 @@ public class HttpParser implements HttpParserInterface {
         return httpRequestLine;
     }
 
-    private HttpRequest.HttpRequestLine mapRequestLineFromStringArray(@NonNull String[] array) {
+    private HttpRequestLine mapRequestLineFromStringArray(@NonNull String[] array) {
         if (array.length == 0) {
-            return new HttpRequest.HttpRequestLine();
+            return new HttpRequestLine();
         }
-        HttpRequest.HttpRequestLine httpRequestLine = null;
+        HttpRequestLine httpRequestLine = null;
         try {
-            httpRequestLine = new HttpRequest.HttpRequestLine(HttpMethod.valueOf(array[0]), array[1], array[2]);
+            httpRequestLine = new HttpRequestLine(HttpMethod.valueOf(array[0]), array[1], array[2]);
 
         } catch (Exception ex) {
             throw new InvalidHttpRequestLineException("Your Http Method is not valid");
@@ -77,18 +80,18 @@ public class HttpParser implements HttpParserInterface {
         return httpRequestLine;
     }
 
-    private List<HttpRequest.HttpHeader> mapHttpJsonFromStringArray(@NonNull String[] array) {
+    private List<HttpKeyValue> mapHttpJsonFromStringArray(@NonNull String[] array) {
         if (array.length == 0)
             return new ArrayList<>() {
             };
         return Arrays.stream(array).map(e ->
-                new HttpRequest.HttpHeader(e.split(":")[0], e.split(":")[1])).collect(Collectors.toList());
+                new HttpKeyValue(e.split(":")[0], e.split(":")[1])).collect(Collectors.toList());
     }
 
-    private List<HttpRequest.HttpHeader> mapMapToHttpHeader(Map<Object, Object> map) {
-        List<HttpRequest.HttpHeader> list = new ArrayList<>();
+    private List<HttpKeyValue> mapMapToHttpHeader(Map<Object, Object> map) {
+        List<HttpKeyValue> list = new ArrayList<>();
         for (Map.Entry entry : map.entrySet()) {
-            list.add(new HttpRequest.HttpHeader(String.valueOf(entry.getKey()), String.valueOf(entry.getValue())));
+            list.add(new HttpKeyValue(String.valueOf(entry.getKey()), String.valueOf(entry.getValue())));
         }
         return list;
     }

@@ -1,6 +1,7 @@
 package class_finder;
 
 import annotations.RequestHandler;
+import annotations.RequireHeader;
 import annotations.RequireJson;
 import data.ControllerClazz;
 import enums.http.HttpCode;
@@ -13,9 +14,7 @@ import lombok.Data;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -36,10 +35,10 @@ public class ClassHandler {
                     .filter(e -> e.getAnnotation(RequestHandler.class).method() == controllerClazz.getHttpMethod())
                     .findFirst();
             if (method.isPresent()) {
-                //TODO: check annotation for paramethers and give them that type of data
-                Annotation[][] paramethers = method.get().getParameterAnnotations();
-                System.out.println(httpRequest.getBody());
-                returnValue = method.get().invoke(controllerInstance, httpRequest.getBody());
+                Annotation[][] annotations = method.get().getParameterAnnotations();
+                Set<Object> parameter = decideMethodParametersByAnnotation(httpRequest, annotations);
+                System.out.println(parameter);
+                returnValue = method.get().invoke(controllerInstance, httpRequest.getBody(), httpRequest.getHeader());
 
             }
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -48,5 +47,20 @@ public class ClassHandler {
         return returnValue;
     }
 
+
+    private Set<Object> decideMethodParametersByAnnotation(HttpRequest httpRequest, Annotation[][] annotations) {
+        Set<Object> setOfParameters = new HashSet<>();
+        for (int i = 0; i < annotations.length; i++) {
+            for (int j = 0; j < annotations[0].length; j++) {
+                if (annotations[i][j] instanceof RequireJson) {
+                    setOfParameters.add(httpRequest.getBody());
+                } else if (annotations[i][j] instanceof RequireHeader) {
+                    setOfParameters.add(httpRequest.getHeader());
+                }
+            }
+
+        }
+        return setOfParameters;
+    }
 
 }
