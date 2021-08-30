@@ -3,6 +3,7 @@ package server.thread;
 import annotations.RequestHandler;
 import class_finder.ClassFinder;
 import class_finder.ClassFinderInterface;
+import class_finder.ClassHandler;
 import data.ControllerClazz;
 import enums.http.HttpCode;
 import http.http_parser.HttpParser;
@@ -46,21 +47,9 @@ public class WelcomeThread implements Runnable {
                 bufferedOutputStream.flush();
                 bufferedOutputStream.close();
             } else {
-                try {
-                    Class<?> controllerClass = classes.getClazz();
-                    Object controllerInstance = controllerClass.getConstructor().newInstance();
-                    Optional<Method> method = Arrays.stream(controllerInstance.getClass().getMethods())
-                            .filter(Objects::nonNull)
-                            .filter(e -> e.isAnnotationPresent(RequestHandler.class))
-                            .filter(e -> e.getAnnotation(RequestHandler.class).path().equals(classes.getMethodPath()))
-                            .filter(e -> e.getAnnotation(RequestHandler.class).method() == classes.getHttpMethod())
-                            .findFirst();
-                    if (method.isPresent()) {
-                        bufferedOutputStream.write(HttpResponseFacade.getHttpResponseForJson(HttpCode.OK, Arrays.asList(method.get().invoke(controllerInstance))).getBytes());
-                    }
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
+                ClassHandler classHandler = new ClassHandler(classes, httpRequest);
+                Object value = classHandler.invokeMethodByClass();
+                bufferedOutputStream.write(HttpResponseFacade.getHttpResponseForJson(HttpCode.OK, Arrays.asList(value)).getBytes());
                 bufferedOutputStream.flush();
                 bufferedOutputStream.close();
             }

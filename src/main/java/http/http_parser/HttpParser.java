@@ -26,7 +26,6 @@ public class HttpParser implements HttpParserInterface {
         String body = getBody(mapRequestLineFromStringArray(requestLine));
         if (body != null) {
             JsonParserInterface jsonParserInterface = new JsonParser();
-            System.out.println(jsonParserInterface.parseJson(body));
             return new HttpRequest(mapRequestLineFromStringArray(requestLine),
                     mapHttpJsonFromStringArray(headerArray),
                     mapMapToHttpHeader(jsonParserInterface.parseJson(body)));
