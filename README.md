@@ -39,6 +39,8 @@ public class Main {
 
 ```java
 
+import annotations.RequireJson;
+
 @Controller(path = "/test")
 public class Test {
 
@@ -48,8 +50,8 @@ public class Test {
     }
 
     @RequestHandler(path = "/viktor", method = HttpMethod.POST)
-    public String heje() {
-        return "Cao Viktore POST";
+    public String heje(@RequireJson Object data) {
+        return data;
     }
 
     @RequestHandler(path = "/toma", method = HttpMethod.PUT)
