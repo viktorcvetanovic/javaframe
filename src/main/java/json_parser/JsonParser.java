@@ -10,104 +10,70 @@ public class JsonParser implements JsonParserInterface {
 
     private String jsonString;
     private Map<Object, Object> map = new HashMap<>();
-    private int counter = 0;
+    private Iterator<Character> iterator;
 
     @Override
     public Map<Object, Object> parseJson(@NonNull String json) {
         this.jsonString = json.trim();
-
-        if ((this.jsonString.charAt(0) != '{' || jsonString.charAt(jsonString.length() - 1) != '}')
-                && (this.jsonString.charAt(0) != '[' || jsonString.charAt(jsonString.length() - 1) != ']')) {
-            throw new InvalidJsonFormatException("Your Json is not valid");
-        }
-        while (true) {
-            if (counter == jsonString.length()) {
-                break;
-            }
-            var current = jsonString.charAt(counter++);
-            if (current == ' ' || current == '\n' || current == ',' || current == '"') {
-                continue;
-            }
-            if (current == '{') {
-                readObject();
-            }
-
-            if (current == '[') {
-                readArray();
-            }
-//                throw new InvalidJsonFormatException(String.format("You have error in your Json %s", counter));
-        }
-        return map;
-    }
-
-    private void readArray() {
+        validateJson();
+        var keyOrValue = true;
+        var keyBuilder = new StringBuilder();
+        var valueBuilder = new StringBuilder();
+        var state = 0;
         List<Object> list = new ArrayList<>();
-        StringBuilder keyBuilder = new StringBuilder();
-        while (true) {
-            var current = jsonString.charAt(counter++);
-            if (current == '"') {
+        //glavna logika mora da se odvija ovde, mora da postoje metode koje ce da vracaju elemente koji se dodaju u Mapu u zavisnosti koji je tip.
+        initializeIterator();
+        while (iterator.hasNext()) {
+            var current = iterator.next();
+            if (current == ' ' || current == '"') {
                 continue;
             }
+
             if (current == '{') {
-                readObject();
-                continue;
-            }
-            if (current == ',') {
-                list.add(keyBuilder.toString());
-                keyBuilder.setLength(0);
-                continue;
-            }
-            if (current == ']') {
-                if (!keyBuilder.toString().equals("")) {
-                    list.add(keyBuilder.toString());
-                }
-                keyBuilder.setLength(0);
-                map.put("lista" + counter, list);
-                break;
-            }
-            keyBuilder.append(current);
-        }
-    }
-
-
-    private void readObject() {
-        StringBuilder keyBuilder = new StringBuilder();
-        StringBuilder valueBuilder = new StringBuilder();
-        boolean keyOrValue = true;
-        while (true) {
-            var current = jsonString.charAt(counter++);
-
-            if (current == '[') {
-                keyBuilder.setLength(0);
-                valueBuilder.setLength(0);
-                readArray();
-                continue;
-            }
-            if (current == '"') {
+                state = 0;
                 continue;
             }
             if (current == ':') {
                 keyOrValue = false;
                 continue;
             }
-            if (current == ',') {
-                keyOrValue = true;
-                map.put(keyBuilder.toString(), valueBuilder.toString());
-                keyBuilder.setLength(0);
-                valueBuilder.setLength(0);
+            if (current == '[') {
+                state = 1;
                 continue;
-            }
-            if (current == '}') {
-                keyOrValue = true;
-                map.put(keyBuilder.toString(), valueBuilder.toString());
-                keyBuilder.setLength(0);
-                valueBuilder.setLength(0);
-                break;
             }
 
-            if (current == '{') {
-                readObject();
-                continue;
+
+            if (state == 0) {
+                if (current == '}') {
+                    map.put(keyBuilder.toString(), valueBuilder.toString());
+                    state = 1;
+                    continue;
+                }
+                if (current == ',') {
+                    keyOrValue = true;
+                    if (!keyBuilder.toString().equals("")) {
+                        map.put(keyBuilder.toString(), valueBuilder.toString());
+                    }
+                    valueBuilder.setLength(0);
+                    keyBuilder.setLength(0);
+                    continue;
+                }
+            }
+            if (state == 1) {
+                if (current == ',') {
+                    list.add(valueBuilder.toString());
+                    valueBuilder.setLength(0);
+                    continue;
+                }
+                if (current == ']') {
+                    list.add(valueBuilder.toString());
+                    map.put(keyBuilder.toString(), list);
+                    valueBuilder.setLength(0);
+                    keyBuilder.setLength(0);
+                    list = new ArrayList<>();
+                    state = 0;
+                    continue;
+                }
             }
             if (keyOrValue) {
                 keyBuilder.append(current);
@@ -115,6 +81,24 @@ public class JsonParser implements JsonParserInterface {
                 valueBuilder.append(current);
             }
         }
+
+        return map;
+    }
+
+
+    private void validateJson() {
+        if ((this.jsonString.charAt(0) != '{' || jsonString.charAt(jsonString.length() - 1) != '}')
+                && (this.jsonString.charAt(0) != '[' || jsonString.charAt(jsonString.length() - 1) != ']')) {
+            throw new InvalidJsonFormatException("Your Json is not valid");
+        }
+    }
+
+    private void initializeIterator() {
+        List<Character> characterList = new ArrayList<>();
+        for (char c : this.jsonString.toCharArray()) {
+            characterList.add(c);
+        }
+        this.iterator = characterList.iterator();
     }
 
 
