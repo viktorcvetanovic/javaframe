@@ -20,15 +20,26 @@ Things that need to be developed:
 
 This is example how you should use framework:
 
-* First thing what you need to do, is to make Main class and config your server. Currently, configuration is done by
-  class.
+* First thing what you need to do, is to make Main class and config your server.
+
+You can do that by creating a **app.properties** file under resources' dir. Currently, only available configuration is
+for server. It should look like this:
+
+```
+~pwd: ~/resources/app.properties
+
+server_ip=localhost
+server_port=7070
+server_backlog=70
+```
+
+* Next step is creating main class.
+
+Because of that way of configuration, we can run our entire framework with just one command.
 
 ```java
 public class Main {
     public static void main(String[] args) {
-        ServerMainHandler.Config.setBackLog(0);
-        ServerMainHandler.Config.setInetAdress("0.0.0.0");
-        ServerMainHandler.Config.setServerPort(7070);
         ServerMainHandler.run();
     }
 }
@@ -39,6 +50,7 @@ public class Main {
 
 ```java
 
+import annotations.RequireHeader;
 import annotations.RequireJson;
 
 @Controller(path = "/test")
@@ -50,7 +62,7 @@ public class Test {
     }
 
     @RequestHandler(path = "/viktor", method = HttpMethod.POST)
-    public String heje(@RequireJson Object data) {
+    public String heje(@RequireJson Object data, @RequireHeader Object header) {
         return data;
     }
 
