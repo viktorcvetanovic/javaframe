@@ -6,6 +6,7 @@ import class_finder.ClassFinderInterface;
 import class_finder.ClassHandler;
 import data.ControllerClazz;
 import enums.http.HttpCode;
+import exception.controller.InvalidParameterClassOrJsonData;
 import http.http_parser.HttpParser;
 import http.http_parser.HttpParserInterface;
 import http.http_response_builder.HttpResponseFacade;
@@ -39,24 +40,33 @@ public class WelcomeThread implements Runnable {
             HttpParserInterface httpParser = new HttpParser();
             var httpRequest = httpParser.parse(bytes);
             ClassFinderInterface classFinderInterface = new ClassFinder();
-            //THROW 404
             ControllerClazz classes = classFinderInterface.findClassByPathAndMethod(httpRequest);
             if (classes == null) {
-                bufferedOutputStream
-                        .write(HttpResponseFacade.getHttpResponseFor404().getBytes(StandardCharsets.UTF_8));
-                bufferedOutputStream.flush();
-                bufferedOutputStream.close();
+                writeMessageToServer(bufferedOutputStream, HttpResponseFacade.getHttpResponseFor404());
             } else {
                 ClassHandler classHandler = new ClassHandler(classes, httpRequest);
-                Object value = classHandler.invokeMethodByClass();
-                bufferedOutputStream.write(HttpResponseFacade.getHttpResponseForJson(HttpCode.OK, Arrays.asList(value)).getBytes());
-                bufferedOutputStream.flush();
-                bufferedOutputStream.close();
+                Object value = null;
+                try {
+                    value = classHandler.invokeMethodByClass();
+                    writeMessageToServer(bufferedOutputStream, HttpResponseFacade.getHttpResponseForJson(HttpCode.OK, Arrays.asList(value)));
+                } catch (InvalidParameterClassOrJsonData ex) {
+                    //TODO : make method to throw exceptions
+                    ex.printStackTrace();
+                    writeMessageToServer(bufferedOutputStream, HttpResponseFacade.getHttpResponseFor404());
+                }
             }
 
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private void writeMessageToServer(BufferedOutputStream bufferedOutputStream, String message) throws IOException {
+        bufferedOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
+        bufferedOutputStream.flush();
+        bufferedOutputStream.close();
     }
 
 }

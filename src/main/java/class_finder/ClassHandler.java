@@ -5,6 +5,7 @@ import annotations.RequireHeader;
 import annotations.RequireJson;
 import data.ControllerClazz;
 import enums.http.HttpCode;
+import exception.controller.InvalidParameterClassOrJsonData;
 import http.data.HttpKeyValue;
 import http.data.HttpRequest;
 import http.data.HttpResponse;
@@ -74,7 +75,7 @@ public class ClassHandler {
                         var obj = p.getType().cast(value.getValue());
                         return (T) obj;
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        throw new InvalidParameterClassOrJsonData("Your method " + p + " has error for parsing " + nameOfField + " field, check your type");
                     }
                 }
             }
