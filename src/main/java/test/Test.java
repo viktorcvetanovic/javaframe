@@ -5,6 +5,7 @@ import annotations.RequestHandler;
 import annotations.RequireHeader;
 import annotations.RequireJson;
 import enums.http.HttpMethod;
+import http.data.HttpKeyValue;
 
 import java.util.Arrays;
 
@@ -12,7 +13,8 @@ import java.util.Arrays;
 public class Test {
 
     @RequestHandler(method = HttpMethod.POST, path = "/viktor")
-    public Object dataaaa(@RequireHeader Object a, @RequireJson Object e) {
-        return Arrays.asList(a, e);
+    public Object dataaaa(@RequireJson(name = "viktor") String viktor, @RequireJson(name = "mare") String mare) {
+        System.out.println(mare);
+        return viktor;
     }
 }

@@ -5,6 +5,7 @@ import annotations.RequireHeader;
 import annotations.RequireJson;
 import data.ControllerClazz;
 import enums.http.HttpCode;
+import http.data.HttpKeyValue;
 import http.data.HttpRequest;
 import http.data.HttpResponse;
 import http.http_response_builder.HttpResponseFacade;
@@ -14,6 +15,7 @@ import lombok.Data;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.*;
 
 @Data
@@ -35,9 +37,9 @@ public class ClassHandler {
                     .filter(e -> e.getAnnotation(RequestHandler.class).method() == controllerClazz.getHttpMethod())
                     .findFirst();
             if (method.isPresent()) {
-                Annotation[][] annotations = method.get().getParameterAnnotations();
-                Set<Object> parameter = decideMethodParametersByAnnotation(httpRequest, annotations);
-                returnValue = method.get().invoke(controllerInstance, parameter.toArray());
+
+                Set<Object> parameterValues = decideMethodParametersByAnnotation(httpRequest, method.get());
+                returnValue = method.get().invoke(controllerInstance, parameterValues.toArray());
             }
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
@@ -46,19 +48,38 @@ public class ClassHandler {
     }
 
 
-    private Set<Object> decideMethodParametersByAnnotation(HttpRequest httpRequest, Annotation[][] annotations) {
+    private Set<Object> decideMethodParametersByAnnotation(HttpRequest httpRequest, Method method) {
+        Annotation[][] annotations = method.getParameterAnnotations();
         Set<Object> setOfParameters = new HashSet<>();
         for (int i = 0; i < annotations.length; i++) {
             for (int j = 0; j < annotations[0].length; j++) {
                 if (annotations[i][j] instanceof RequireJson) {
-                    setOfParameters.add(httpRequest.getBody());
+                    var obj = checkIfObjectMatchNameAndType(httpRequest.getBody(), ((RequireJson) annotations[i][j]).name(), method.getParameters());
+                    setOfParameters.add(obj);
                 } else if (annotations[i][j] instanceof RequireHeader) {
-                    setOfParameters.add(httpRequest.getHeader());
+                    var obj = checkIfObjectMatchNameAndType(httpRequest.getHeader(), ((RequireHeader) annotations[i][j]).name(), method.getParameters());
+                    setOfParameters.add(obj);
                 }
             }
         }
         return setOfParameters;
     }
 
+
+    private <T> T checkIfObjectMatchNameAndType(List<HttpKeyValue> list, String nameOfField, Parameter... parameters) {
+        for (Parameter p : parameters) {
+            for (HttpKeyValue value : list) {
+                if (value.getKey().equals(nameOfField)) {
+                    try {
+                        var obj = p.getType().cast(value.getValue());
+                        return (T) obj;
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
 }
