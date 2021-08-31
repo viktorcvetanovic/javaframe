@@ -37,9 +37,7 @@ public class ClassHandler {
             if (method.isPresent()) {
                 Annotation[][] annotations = method.get().getParameterAnnotations();
                 Set<Object> parameter = decideMethodParametersByAnnotation(httpRequest, annotations);
-                System.out.println(parameter);
-                returnValue = method.get().invoke(controllerInstance, httpRequest.getBody(), httpRequest.getHeader());
-
+                returnValue = method.get().invoke(controllerInstance, parameter.toArray());
             }
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
@@ -58,9 +56,9 @@ public class ClassHandler {
                     setOfParameters.add(httpRequest.getHeader());
                 }
             }
-
         }
         return setOfParameters;
     }
+
 
 }

@@ -6,11 +6,13 @@ import annotations.RequireHeader;
 import annotations.RequireJson;
 import enums.http.HttpMethod;
 
+import java.util.Arrays;
+
 @Controller(path = "/test")
 public class Test {
 
     @RequestHandler(method = HttpMethod.POST, path = "/viktor")
-    public Object dataaaa(@RequireJson Object e, @RequireHeader Object a) {
-        return e;
+    public Object dataaaa(@RequireHeader Object a, @RequireJson Object e) {
+        return Arrays.asList(a, e);
     }
 }
