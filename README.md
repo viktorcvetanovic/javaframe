@@ -81,7 +81,7 @@ public class Test {
 }
 ```
 
-## Building
+## BUILDING
 
 Building this project is very easy, because it has maven dependency. Everything you need to do is to clone this repo and
 type in terminal **maven package**. When it finishes you will have **.jar** file in
