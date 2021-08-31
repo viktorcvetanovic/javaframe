@@ -15,6 +15,6 @@ public class Test {
     @RequestHandler(method = HttpMethod.POST, path = "/viktor")
     public String dataaaa(@RequireJson(name = "viktor") String viktor, @RequireJson(name = "mare") String mare) {
         System.out.println(mare);
-        return viktor;
+        return viktor + " je najveci bog";
     }
 }

@@ -2,7 +2,11 @@
 
 ### Java framework made for fun and learning.
 
-Everything in JavaFrame is custom and made by me. From parsing request to returning results.
+Everything in JavaFrame is custom and made by me. From parsing request to returning results. Inspiration for creating
+this came because I love codding, and I use other frameworks, but I never had fully understood how they handle my code.
+So I decided to try making my own framework.
+
+## FEATURES
 
 Still in development, but very fast growing project. At this moment available features are:
 
@@ -17,6 +21,8 @@ Things that need to be developed:
 * Working with Database
 * Security
 * Generating controllers and entities by DDL
+
+## CONFIG
 
 This is example how you should use framework:
 
@@ -45,6 +51,8 @@ public class Main {
 }
 ```
 
+## USAGE
+
 * When you configure your server, JavaFrame is going to handle everything for you. You just need to define controllers
   like I showed here
 
@@ -72,3 +80,9 @@ public class Test {
     }
 }
 ```
+
+## Building
+
+Building this project is very easy, because it has maven dependency. Everything you need to do is to clone this repo and
+type in terminal **maven package**. When it finishes you will have **.jar** file in
+/javaframe/target/javaframe-1.0-SNAPSHOT.jar. After that you can add it to project like everything else.
