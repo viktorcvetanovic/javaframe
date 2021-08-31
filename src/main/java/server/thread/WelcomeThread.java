@@ -28,6 +28,7 @@ import java.util.*;
 public class WelcomeThread implements Runnable {
     private Socket socket;
 
+    //TODO : refactor this plzzz
     @Override
     public void run() {
         try {
