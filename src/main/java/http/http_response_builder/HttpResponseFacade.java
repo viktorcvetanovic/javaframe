@@ -16,6 +16,10 @@ public class HttpResponseFacade {
                 .build();
     }
 
+    public static String getHttpResponseForException(String message) {
+        return null;
+    }
+
     public static String getHttpResponseFor404() {
         return HttpResponseBuilder
                 .getBuilder()

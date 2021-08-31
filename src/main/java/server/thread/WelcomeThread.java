@@ -55,7 +55,6 @@ public class WelcomeThread implements Runnable {
                     writeMessageToServer(bufferedOutputStream, HttpResponseFacade.getHttpResponseFor404());
                 }
             }
-
         } catch (
                 IOException e) {
             e.printStackTrace();

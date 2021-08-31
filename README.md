@@ -50,25 +50,25 @@ public class Main {
 
 ```java
 
+import annotations.RequestHandler;
 import annotations.RequireHeader;
 import annotations.RequireJson;
+import enums.http.HttpMethod;
 
 @Controller(path = "/test")
 public class Test {
 
-    @RequestHandler(path = "/viktor", method = HttpMethod.GET)
-    public String hej() {
-        return "Cao Viktore";
+    @RequestHandler(method = HttpMethod.POST, path = "/viktor")
+    public String dataaaa(@RequireJson(name = "viktor") String viktor, @RequireJson(name = "mare") String mare) {
+        System.out.println(mare);
+        return viktor;
     }
 
-    @RequestHandler(path = "/viktor", method = HttpMethod.POST)
-    public String heje(@RequireJson Object data, @RequireHeader Object header) {
-        return data;
-    }
-
-    @RequestHandler(path = "/toma", method = HttpMethod.PUT)
-    public String heja() {
-        return "Cao Tomislave";
+    //paths are same, but we can know what method will be invoked by HttpMethod(GET,POST...)
+    @RequestHandler(method = HttpMethod.GET, path = "/viktor")
+    public String data(@RequireHeader(name = "proba") String proba) {
+        System.out.println(proba);
+        return proba;
     }
 }
 ```

@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class Test {
 
     @RequestHandler(method = HttpMethod.POST, path = "/viktor")
-    public Object dataaaa(@RequireJson(name = "viktor") Integer viktor, @RequireJson(name = "mare") String mare) {
+    public String dataaaa(@RequireJson(name = "viktor") String viktor, @RequireJson(name = "mare") String mare) {
         System.out.println(mare);
         return viktor;
     }
