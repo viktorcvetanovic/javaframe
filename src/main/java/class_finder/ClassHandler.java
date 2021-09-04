@@ -4,12 +4,9 @@ import annotations.RequestHandler;
 import annotations.RequireHeader;
 import annotations.RequireJson;
 import data.ControllerClazz;
-import enums.http.HttpCode;
 import exception.controller.InvalidParameterClassOrJsonData;
-import http.data.HttpKeyValue;
-import http.data.HttpRequest;
-import http.data.HttpResponse;
-import http.http_response_builder.HttpResponseFacade;
+import data.http.HttpKeyValue;
+import data.http.HttpRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package http.http_parser;
 
-import http.data.HttpRequest;
+import data.http.HttpRequest;
 
 public interface HttpParserInterface {
      HttpRequest parse(byte[] rawRequest);

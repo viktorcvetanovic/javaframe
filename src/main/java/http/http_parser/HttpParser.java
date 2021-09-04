@@ -3,11 +3,11 @@ package http.http_parser;
 import enums.http.HttpMethod;
 import exception.http.InvalidHttpRequestLineException;
 
-import http.data.HttpKeyValue;
-import http.data.HttpRequest;
-import http.data.HttpRequestLine;
-import json_parser.JsonParser;
-import json_parser.JsonParserInterface;
+import data.http.HttpKeyValue;
+import data.http.HttpRequest;
+import data.http.HttpRequestLine;
+import http.json_parser.JsonParser;
+import http.json_parser.JsonParserInterface;
 import lombok.NonNull;
 
 import java.util.ArrayList;

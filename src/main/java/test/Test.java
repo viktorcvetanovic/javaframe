@@ -2,19 +2,18 @@ package test;
 
 import annotations.Controller;
 import annotations.RequestHandler;
-import annotations.RequireHeader;
 import annotations.RequireJson;
 import enums.http.HttpMethod;
-import http.data.HttpKeyValue;
-
-import java.util.Arrays;
+import wrappers.TemplateResponse;
 
 @Controller(path = "/test")
 public class Test {
+    private final TemplateResponse templateResponse = new TemplateResponse();
+
 
     @RequestHandler(method = HttpMethod.POST, path = "/viktor")
-    public String dataaaa(@RequireJson(name = "viktor") String viktor, @RequireJson(name = "mare") String mare) {
-        System.out.println(mare);
-        return viktor + " je najveci bog";
+    public String dataaaa(@RequireJson(name = "viktor") String viktor) {
+        System.out.println(templateResponse.ok(viktor, "proba.html"));
+        return viktor;
     }
 }

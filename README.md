@@ -26,7 +26,7 @@ Things that need to be developed:
 
 This is example how you should use framework:
 
-* First thing what you need to do, is to make Main class and config your server.
+* First thing what you need to do, is to make JavaFrameMain class and config your server.
 
 You can do that by creating a **app.properties** file under resources' dir. Currently, only available configuration is
 for server. It should look like this:
@@ -44,7 +44,7 @@ server_backlog=70
 Because of that way of configuration, we can run our entire framework with just one command.
 
 ```java
-public class Main {
+public class JavaFrameMain {
     public static void main(String[] args) {
         ServerMainHandler.run();
     }
@@ -83,6 +83,9 @@ public class Test {
 
 ## BUILDING
 
-Building this project is very easy, because it has maven dependency. Everything you need to do is to clone this repo and
-type in terminal **maven package**. When it finishes you will have **.jar** file in
+Building this project is very easy, because it has maven dependency. Everything you need to do is to install maven and
+then clone this repo and type in terminal **maven package**. When it finishes you will have **.jar** file in
 /javaframe/target/javaframe-1.0-SNAPSHOT.jar. After that you can add it to project like everything else.
+
+
+

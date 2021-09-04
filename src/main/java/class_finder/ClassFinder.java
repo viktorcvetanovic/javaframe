@@ -4,13 +4,12 @@ package class_finder;
 import annotations.Controller;
 import data.ControllerClazz;
 import enums.http.HttpMethod;
-import http.data.HttpRequest;
+import data.http.HttpRequest;
 import lombok.Getter;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 public class ClassFinder implements ClassFinderInterface {

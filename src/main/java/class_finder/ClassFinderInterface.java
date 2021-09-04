@@ -1,9 +1,7 @@
 package class_finder;
 
 import data.ControllerClazz;
-import http.data.HttpRequest;
-
-import java.util.Optional;
+import data.http.HttpRequest;
 
 public interface ClassFinderInterface {
     ControllerClazz findClassByPathAndMethod(HttpRequest httpRequest);

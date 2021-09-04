@@ -1,8 +1,7 @@
-import json_parser.JsonParser;
-import json_parser.JsonParserInterface;
+import http.json_parser.JsonParser;
+import http.json_parser.JsonParserInterface;
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

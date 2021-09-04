@@ -2,7 +2,7 @@ package http.http_response_builder;
 
 
 import enums.http.HttpCode;
-import http.data.HttpResponse;
+import data.http.HttpResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;

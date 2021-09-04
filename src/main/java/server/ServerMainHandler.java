@@ -2,20 +2,13 @@ package server;
 
 import data.ConfigProperty;
 import enums.config.PropertyValue;
-import exception.server.InvalidPropertiesFileException;
 import exception.server.InvalidServerConfigException;
-import lombok.Data;
 import server.thread.WelcomeThread;
-import util.PropertiesUtil;
+import properties.Properties;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +16,7 @@ public class ServerMainHandler {
     private ServerSocket serverSocket;
     private List<Socket> connectedSocket;
     private Config config;
+
 
     private ServerMainHandler() {
         config = new Config();
@@ -49,14 +43,15 @@ public class ServerMainHandler {
 
     public static final class Config {
 
+        private final Properties properties = new Properties();
 
         public ServerSocket getServerSocket() {
             try {
-                var propertiesUtil = new PropertiesUtil();
-                List<ConfigProperty> configPropertyList = propertiesUtil.getProperties();
-                var serverIp = propertiesUtil.filterPropertyByPropertyEnum(PropertyValue.SERVER_IP, configPropertyList).getPropertyValue();
-                var serverPort = propertiesUtil.filterPropertyByPropertyEnum(PropertyValue.SERVER_PORT, configPropertyList).getPropertyValue();
-                var serverBackLog = propertiesUtil.filterPropertyByPropertyEnum(PropertyValue.SERVER_BACKLOG, configPropertyList).getPropertyValue();
+
+                List<ConfigProperty> configPropertyList = properties.getProperties();
+                var serverIp = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_IP, configPropertyList).getPropertyValue();
+                var serverPort = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_PORT, configPropertyList).getPropertyValue();
+                var serverBackLog = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_BACKLOG, configPropertyList).getPropertyValue();
                 return new ServerSocket(Integer.parseInt(serverPort), Integer.parseInt(serverBackLog));
             } catch (IOException e) {
                 throw new InvalidServerConfigException("Check your server configuration");
