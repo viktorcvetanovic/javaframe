@@ -1,11 +1,11 @@
 package writers;
 
-import class_finder.ClassFinder;
+import annotations.Writtable;
 import http.http_response_builder.HttpResponseBuilder;
 import properties.FileFinder;
 
 import java.io.*;
-import java.util.Arrays;
+import java.util.List;
 
 public class HtmlWriter<T> implements Writer {
 
@@ -26,7 +26,13 @@ public class HtmlWriter<T> implements Writer {
     //TODO: TO BE IMPLEMENTED
     private String write(T data) throws IOException {
         String fileData = new String(file.readAllBytes());
-        return fileData;
+        boolean isObjectAnnotated = data.getClass().isAnnotationPresent(Writtable.class) || (data instanceof List && ((List<?>) data).get(0).getClass().isAnnotationPresent(Writtable.class));
+        if (isObjectAnnotated) {
+            System.out.println("cao");
+        } else {
+
+        }
+        return null;
     }
 
     @Override
