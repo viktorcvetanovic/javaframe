@@ -1,8 +1,9 @@
-package writers;
+package util.writers;
 
 import annotations.Writtable;
 import http.http_response_builder.HttpResponseBuilder;
-import properties.FileFinder;
+import util.iterators.StringIterator;
+import util.properties.FileFinder;
 
 import java.io.*;
 import java.util.List;
@@ -27,12 +28,13 @@ public class HtmlWriter<T> implements Writer {
     private String write(T data) throws IOException {
         String fileData = new String(file.readAllBytes());
         boolean isObjectAnnotated = data.getClass().isAnnotationPresent(Writtable.class) || (data instanceof List && ((List<?>) data).get(0).getClass().isAnnotationPresent(Writtable.class));
+
         if (isObjectAnnotated) {
             System.out.println("cao");
         } else {
-
+            fileData = fileData.replaceAll("\\{.*?\\}}", (String) data);
         }
-        return null;
+        return fileData;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package wrappers;
 
 
-import writers.Writer;
+import util.writers.Writer;
 
 public class TemplateResponse {
 

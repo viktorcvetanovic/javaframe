@@ -3,7 +3,8 @@ package annotations;
 import java.lang.annotation.*;
 
 @Inherited
-@Target(ElementType.TYPE)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Writtable {
+public @interface RequirePath {
+    String name() default "";
 }

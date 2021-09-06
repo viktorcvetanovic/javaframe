@@ -28,11 +28,11 @@ This is example how you should use framework:
 
 * First thing what you need to do, is to make JavaFrameMain class and config your server.
 
-You can do that by creating a **app.properties** file under resources' dir. Currently, only available configuration is
+You can do that by creating a **app.util.properties** file under resources' dir. Currently, only available configuration is
 for server. It should look like this:
 
 ```
-~pwd: ~/resources/app.properties
+~pwd: ~/resources/app.util.properties
 
 server_ip=localhost
 server_port=7070

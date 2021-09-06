@@ -4,7 +4,7 @@ import data.ConfigProperty;
 import enums.config.PropertyValue;
 import exception.server.InvalidServerConfigException;
 import server.thread.WelcomeThread;
-import properties.Properties;
+import util.properties.Properties;
 
 import java.io.IOException;
 import java.net.ServerSocket;

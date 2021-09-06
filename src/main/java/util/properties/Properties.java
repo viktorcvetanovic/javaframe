@@ -1,4 +1,4 @@
-package properties;
+package util.properties;
 
 import data.ConfigProperty;
 import enums.config.PropertyValue;

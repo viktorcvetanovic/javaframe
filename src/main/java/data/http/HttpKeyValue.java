@@ -9,5 +9,5 @@ import lombok.ToString;
 @ToString
 public class HttpKeyValue {
     private String key;
-    private String value;
+    private Object value;
 }

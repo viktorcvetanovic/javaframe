@@ -1,4 +1,4 @@
-package writers;
+package util.writers;
 
 public interface Writer {
 

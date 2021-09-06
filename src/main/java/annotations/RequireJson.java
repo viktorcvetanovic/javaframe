@@ -6,5 +6,5 @@ import java.lang.annotation.*;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequireJson {
-    String name();
+    String name() default "";
 }
