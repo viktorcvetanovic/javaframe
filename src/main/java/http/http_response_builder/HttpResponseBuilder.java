@@ -38,7 +38,12 @@ public class HttpResponseBuilder {
     }
 
     public HttpResponseBuilder withBody(List<Object> body) {
-        httpResponse.setBody(body);
+        httpResponse.setBody(body.toString());
+        return this;
+    }
+
+    public HttpResponseBuilder withBody(String body) {
+        httpResponse.setBody(body.toString());
         return this;
     }
 

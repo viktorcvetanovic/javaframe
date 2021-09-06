@@ -28,7 +28,6 @@ import java.util.*;
 public class WelcomeThread implements Runnable {
     private Socket socket;
 
-    //TODO : refactor this plzzz
     @Override
     public void run() {
         try {
@@ -49,11 +48,9 @@ public class WelcomeThread implements Runnable {
                 Object value = null;
                 try {
                     value = classHandler.invokeMethodByClass();
+                    writeMessageToServer(bufferedOutputStream, HttpResponseFacade.getHttpResponseForHtml((String) value));
+                } catch (Exception ex) {
                     writeMessageToServer(bufferedOutputStream, HttpResponseFacade.getHttpResponseForJson(HttpCode.OK, Arrays.asList(value)));
-                } catch (InvalidParameterClassOrJsonData ex) {
-                    //TODO : make method to throw exceptions
-                    ex.printStackTrace();
-                    writeMessageToServer(bufferedOutputStream, HttpResponseFacade.getHttpResponseFor404());
                 }
             }
         } catch (

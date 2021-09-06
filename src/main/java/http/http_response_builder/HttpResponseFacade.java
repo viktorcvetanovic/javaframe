@@ -20,6 +20,15 @@ public class HttpResponseFacade {
         return null;
     }
 
+    public static String getHttpResponseForHtml(String message) {
+        return HttpResponseBuilder.getBuilder()
+                .withContentLength(message.length())
+                .withBody(message)
+                .withHttpCode(HttpCode.OK)
+                .withContentType("text/html")
+                .build();
+    }
+
     public static String getHttpResponseFor404() {
         return HttpResponseBuilder
                 .getBuilder()

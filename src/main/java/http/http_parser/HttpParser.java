@@ -31,10 +31,10 @@ public class HttpParser implements HttpParserInterface {
             JsonParserInterface jsonParserInterface = new JsonParser();
             return new HttpRequest(mapRequestLineFromStringArray(requestLine),
                     mapHttpJsonFromStringArray(headerArray),
-                    mapMapToHttpHeader(jsonParserInterface.parseJson(body)));
+                    mapMapToHttpHeader(jsonParserInterface.parseJson(body)), mapPathParamsFromRequestLine(requestLine));
         }
         return new HttpRequest(mapRequestLineFromStringArray(requestLine),
-                mapHttpJsonFromStringArray(headerArray), null);
+                mapHttpJsonFromStringArray(headerArray), null, mapPathParamsFromRequestLine(requestLine));
     }
 
 
@@ -72,12 +72,34 @@ public class HttpParser implements HttpParserInterface {
         }
         HttpRequestLine httpRequestLine = null;
         try {
-            httpRequestLine = new HttpRequestLine(HttpMethod.valueOf(array[0]), array[1], array[2]);
-
+            httpRequestLine = new HttpRequestLine(HttpMethod.valueOf(array[0]), array[1].split("\\?")[0], array[2]);
         } catch (Exception ex) {
             throw new InvalidHttpRequestLineException("Your Http Method is not valid");
         }
         return httpRequestLine;
+    }
+
+    private List<HttpKeyValue> mapPathParamsFromRequestLine(String[] httpRequestLine) {
+        String[] request = httpRequestLine[1].split("\\?");
+        if (request.length <= 1) {
+            return null;
+        }
+        StringBuilder key = new StringBuilder();
+        StringBuilder value = new StringBuilder();
+        List<HttpKeyValue> list = new ArrayList<>();
+        String[] params = request[1].split("=");
+        for (int i = 0; i < params.length; i++) {
+            var param = params[i];
+            if (i % 2 == 0) {
+                key.append(param);
+            } else {
+                value.append(param);
+                list.add(new HttpKeyValue(key.toString(), value.toString()));
+                key.setLength(0);
+                value.setLength(0);
+            }
+        }
+        return list;
     }
 
     private List<HttpKeyValue> mapHttpJsonFromStringArray(@NonNull String[] array) {

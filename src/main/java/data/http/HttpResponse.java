@@ -18,7 +18,7 @@ public class HttpResponse {
     private String contentType = "text";
     private LocalDateTime now = LocalDateTime.now();
     private String acceptRange = "bytes";
-    private List<Object> body;
+    private String body;
 
 
     public String returnHttpToString() {

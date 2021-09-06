@@ -16,5 +16,6 @@ public class HttpRequest {
     private HttpRequestLine httpRequestLine;
     private List<HttpKeyValue> header;
     private List<HttpKeyValue> body;
+    private List<HttpKeyValue> pathParams;
 
 }

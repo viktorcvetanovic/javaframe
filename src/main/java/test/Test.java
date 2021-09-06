@@ -1,9 +1,6 @@
 package test;
 
-import annotations.Controller;
-import annotations.RequestHandler;
-import annotations.RequireHeader;
-import annotations.RequireJson;
+import annotations.*;
 import enums.http.HttpMethod;
 import wrappers.TemplateResponse;
 
@@ -15,7 +12,12 @@ public class Test {
 
 
     @RequestHandler(method = HttpMethod.GET, path = "/viktor")
-    public String dataaaa(@RequireHeader(name = "viktor") String viktor) {
+    public String dataaaa(@RequirePath(name = "viktor") String viktor) {
         return templateResponse.ok(viktor, "proba.html");
+    }
+
+    @RequestHandler(method = HttpMethod.POST, path = "/taske")
+    public User proba(@RequireJson(name = "viktor") User user) {
+        return user;
     }
 }

@@ -39,7 +39,9 @@ public class ClassHandler {
             if (method.isPresent()) {
 
                 Set<Object> parameterValues = decideMethodParametersByAnnotation(httpRequest, method.get());
-                returnValue = method.get().invoke(controllerInstance, parameterValues.toArray());
+                if (!parameterValues.isEmpty()) {
+                    returnValue = method.get().invoke(controllerInstance, parameterValues.toArray());
+                }
             }
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
@@ -59,8 +61,10 @@ public class ClassHandler {
                 var obj = checkIfObjectMatchNameAndTypeForHeader(httpRequest.getHeader(), params[i].getAnnotation(RequireHeader.class).name(), params[i]);
                 setOfParameters.add(obj);
             } else if (params[i].isAnnotationPresent(RequirePath.class)) {
-                //TODO: TO BE IMPLEMENTED
-                return null;
+                if (httpRequest.getPathParams() != null) {
+                    var obj = checkIfObjectMatchNameAndTypeForHeader(httpRequest.getPathParams(), params[i].getAnnotation(RequirePath.class).name(), params[i]);
+                    setOfParameters.add(obj);
+                }
             }
         }
         return setOfParameters;
