@@ -87,6 +87,7 @@ public class HttpParser implements HttpParserInterface {
         StringBuilder key = new StringBuilder();
         StringBuilder value = new StringBuilder();
         List<HttpKeyValue> list = new ArrayList<>();
+        //TODO : NEED TO BE SPLITED WITH & AND THEN GET KEY AND VALUE WITH =...
         String[] params = request[1].split("=");
         for (int i = 0; i < params.length; i++) {
             var param = params[i];

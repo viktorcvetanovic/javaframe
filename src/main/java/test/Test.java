@@ -13,7 +13,7 @@ public class Test {
 
     @RequestHandler(method = HttpMethod.GET, path = "/viktor")
     public String dataaaa(@RequirePath(name = "viktor") String viktor) {
-        return templateResponse.ok(viktor, "proba.html");
+        return templateResponse.ok(viktor, "soon.html");
     }
 
     @RequestHandler(method = HttpMethod.POST, path = "/taske")
