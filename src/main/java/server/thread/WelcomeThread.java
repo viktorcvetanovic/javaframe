@@ -19,5 +19,4 @@ public class WelcomeThread implements Runnable {
         serviceHandler.handle();
     }
 
-
 }
