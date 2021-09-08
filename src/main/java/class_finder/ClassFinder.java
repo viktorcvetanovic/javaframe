@@ -5,32 +5,30 @@ import annotations.Controller;
 import data.ControllerClazz;
 import enums.http.HttpMethod;
 import data.http.HttpRequest;
+import exception.controller.ClassNotFoundException;
 import lombok.Getter;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
+import util.classutil.ClassUtil;
 
 import java.util.*;
 
 @Getter
 public class ClassFinder implements ClassFinderInterface {
-
+    private final ClassUtil classUtil = new ClassUtil();
 
     @Override
     public ControllerClazz findClassByPathAndMethod(HttpRequest httpRequest) {
         String path = httpRequest.getHttpRequestLine().getPath();
         HttpMethod method = httpRequest.getHttpRequestLine().getMethod();
-        var reflections = new Reflections("", new SubTypesScanner(false));
-        Optional<Class<?>> clazz = reflections.getSubTypesOf(Object.class)
-                .stream()
-                .filter(e -> e.getAnnotation(Controller.class) != null)
-                .filter(e -> path.startsWith(e.getAnnotation(Controller.class).path()))
-                .findFirst();
+        Optional<Class<?>> clazz = classUtil.findFirstClassByAnnotationAndPath(Controller.class, path);
+
         if (clazz.isPresent()) {
             var controllerPath = clazz.get().getAnnotation(Controller.class).path();
             var methodPath = getSplitMethodPath(controllerPath, path);
             return new ControllerClazz(clazz.get(), controllerPath, methodPath, method);
         }
-        return null;
+        throw new ClassNotFoundException("Class not found");
     }
 
 

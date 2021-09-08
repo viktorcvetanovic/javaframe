@@ -12,7 +12,6 @@ import java.net.Socket;
 public class WelcomeThread implements Runnable {
     private Socket socket;
 
-    //TODO : check if it is better to parse http here to know what file we are searching for.
     @Override
     public void run() {
         ServiceHandler serviceHandler = new ServiceHandlerImpl();

@@ -10,6 +10,7 @@ import data.http.HttpKeyValue;
 import data.http.HttpRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import util.classutil.ClassUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -23,13 +24,13 @@ public class ClassHandler {
 
     private ControllerClazz controllerClazz;
     private HttpRequest httpRequest;
+    private final ClassUtil classUtil = new ClassUtil();
 
     public Object invokeMethodByClass() {
         Object returnValue = null;
         try {
             Class<?> controllerClass = controllerClazz.getClazz();
-            //TODO: CHANGE TO GET ANY CONSTRUCTOR
-            Object controllerInstance = controllerClass.getConstructor().newInstance();
+            Object controllerInstance = classUtil.getBestConstructor(controllerClass).newInstance();
             var method = Arrays.stream(controllerInstance.getClass().getMethods())
                     .filter(Objects::nonNull)
                     .filter(e -> e.isAnnotationPresent(RequestHandler.class))
@@ -43,7 +44,8 @@ public class ClassHandler {
                     returnValue = method.get().invoke(controllerInstance, parameterValues.toArray());
                 }
             }
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            //TODO: RETHROW EXCEPTION AND CATCH ONE BY ONE
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return returnValue;

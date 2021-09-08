@@ -47,12 +47,12 @@ public class ServerMainHandler {
 
         public ServerSocket getServerSocket() {
             try {
-
+                //TODO: FIX THIS
                 List<ConfigProperty> configPropertyList = properties.getProperties();
                 var serverIp = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_IP, configPropertyList).getPropertyValue();
                 var serverPort = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_PORT, configPropertyList).getPropertyValue();
                 var serverBackLog = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_BACKLOG, configPropertyList).getPropertyValue();
-                return new ServerSocket(Integer.parseInt(serverPort), Integer.parseInt(serverBackLog));
+                return new ServerSocket(Integer.parseInt(serverPort));
             } catch (IOException e) {
                 throw new InvalidServerConfigException("Check your server configuration");
             }

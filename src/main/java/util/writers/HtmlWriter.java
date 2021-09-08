@@ -1,47 +1,48 @@
 package util.writers;
 
-import annotations.Writtable;
 import http.http_response_builder.HttpResponseBuilder;
-import util.iterators.StringIterator;
 import util.properties.FileFinder;
 
 import java.io.*;
-import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HtmlWriter<T> implements Writer {
 
 
-    private final HttpResponseBuilder httpResponseBuilder = new HttpResponseBuilder();
     private final FileFinder fileFinder = new FileFinder();
-
+    private final Pattern pattern = Pattern.compile("\\{\\{([a-zA-Z._]+)}}");
     private static final String DIR_NAME = "templates/";
     private InputStream file = null;
-    private static final String[] symbolToReplace = new String[]{"{{", "}}"};
-    private T data;
+    private Map<String, String> data;
     private String fileName;
 
-    public HtmlWriter(T data) {
+    public HtmlWriter(Map<String, String> data) {
         this.data = data;
     }
 
-    //TODO: TO BE IMPLEMENTED
-    private String write(T data) throws IOException {
+    private String write() throws IOException {
         String fileData = new String(file.readAllBytes());
-        boolean isObjectAnnotated = data.getClass().isAnnotationPresent(Writtable.class) || (data instanceof List && ((List<?>) data).get(0).getClass().isAnnotationPresent(Writtable.class));
 
-        if (isObjectAnnotated) {
-            System.out.println("cao");
-        } else {
-            fileData = fileData.replaceAll("\\{.*?\\}}", (String) data);
+            StringBuilder builder = new StringBuilder();
+            Matcher matcher = pattern.matcher(fileData);
+
+            while (matcher.find()) {
+                String key = matcher.group(1);
+                if (key != null)
+                    matcher.appendReplacement(builder, data.get(key));
+            }
+            matcher.appendTail(builder);
+            return builder.toString();
         }
-        return fileData;
-    }
+
 
     @Override
     public String writeAndRead() {
         try {
             file = fileFinder.findFileByName(DIR_NAME + fileName);
-            return write(data);
+            return write();
         } catch (IOException e) {
             throw new RuntimeException();
         }
