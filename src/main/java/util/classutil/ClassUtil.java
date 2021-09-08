@@ -8,6 +8,7 @@ import org.reflections.scanners.SubTypesScanner;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
 
 public class ClassUtil {
     private final Reflections reflections = new Reflections("", new SubTypesScanner(false));
@@ -42,5 +43,9 @@ public class ClassUtil {
 
     public Constructor<?>[] getAllConstructors(Class<?> clazz) {
         return clazz.getConstructors();
+    }
+
+    public Set<Class<?>> getAllLoadedClasses() {
+        return reflections.getSubTypesOf(Object.class);
     }
 }
