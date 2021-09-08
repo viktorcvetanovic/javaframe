@@ -1,14 +1,21 @@
 package wrappers;
 
 
+import util.writers.HtmlWriter;
 import util.writers.Writer;
 
-public class TemplateResponse {
+import java.util.Map;
 
-    public <T> String ok(T data, String s) {
-        Writer writer = Writer.initialize(data);
-        writer.setFile(s);
-        return writer.writeAndRead();
+public class TemplateResponse {
+    private final Writer htmlWriter = new HtmlWriter();
+
+    public String ok(String file) {
+        htmlWriter.setFile(file);
+        return htmlWriter.writeAndRead();
+    }
+
+    public void setData(String key, String value) {
+        htmlWriter.setData(key, value);
     }
 
 }
