@@ -7,6 +7,7 @@ import server.thread.WelcomeThread;
 import util.properties.Properties;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -47,12 +48,20 @@ public class ServerMainHandler {
 
         public ServerSocket getServerSocket() {
             try {
-                //TODO: FIX THIS
                 List<ConfigProperty> configPropertyList = properties.getProperties();
                 var serverIp = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_IP, configPropertyList).getPropertyValue();
                 var serverPort = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_PORT, configPropertyList).getPropertyValue();
                 var serverBackLog = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_BACKLOG, configPropertyList).getPropertyValue();
-                return new ServerSocket(Integer.parseInt(serverPort));
+                if (serverIp == null) {
+                    serverIp = "localhost";
+                }
+                if (serverPort == null) {
+                    serverPort = "8080";
+                }
+                if (serverBackLog == null) {
+                    serverBackLog = "80";
+                }
+                return new ServerSocket(Integer.parseInt(serverPort), Integer.parseInt(serverBackLog), InetAddress.getByName(serverIp));
             } catch (IOException e) {
                 throw new InvalidServerConfigException("Check your server configuration");
             }

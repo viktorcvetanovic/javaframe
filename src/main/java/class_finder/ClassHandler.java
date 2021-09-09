@@ -43,7 +43,6 @@ public class ClassHandler {
                     returnValue = method.get().invoke(controllerInstance, parameterValues.toArray());
                 }
             }
-            //TODO: RETHROW EXCEPTION AND CATCH ONE BY ONE
         return returnValue;
     }
 
