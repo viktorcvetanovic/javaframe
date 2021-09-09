@@ -26,9 +26,8 @@ public class ClassHandler {
     private HttpRequest httpRequest;
     private final ClassUtil classUtil = new ClassUtil();
 
-    public Object invokeMethodByClass() {
+    public Object invokeMethodByClass() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         Object returnValue = null;
-        try {
             Class<?> controllerClass = controllerClazz.getClazz();
             Object controllerInstance = classUtil.getBestConstructor(controllerClass).newInstance();
             var method = Arrays.stream(controllerInstance.getClass().getMethods())
@@ -45,14 +44,11 @@ public class ClassHandler {
                 }
             }
             //TODO: RETHROW EXCEPTION AND CATCH ONE BY ONE
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
         return returnValue;
     }
 
 
-    private Set<Object> decideMethodParametersByAnnotation(HttpRequest httpRequest, Method method) {
+    private Set<Object> decideMethodParametersByAnnotation(HttpRequest httpRequest, Method method) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         Parameter[] params = method.getParameters();
         Set<Object> setOfParameters = new HashSet<>();
         for (int i = 0; i < params.length; i++) {
@@ -72,10 +68,9 @@ public class ClassHandler {
         return setOfParameters;
     }
 
-    private <T> T checkIfObjectMatchTypeForBody(List<HttpKeyValue> body, Parameter parameter) {
+    private <T> T checkIfObjectMatchTypeForBody(List<HttpKeyValue> body, Parameter parameter) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         Field[] fields = parameter.getType().getDeclaredFields();
         Object obj = null;
-        try {
             obj = parameter.getType().getDeclaredConstructor().newInstance();
             for (Field f : fields) {
                 for (HttpKeyValue value : body) {
@@ -87,9 +82,6 @@ public class ClassHandler {
                 }
 
             }
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
 
         return (T) obj;
     }
