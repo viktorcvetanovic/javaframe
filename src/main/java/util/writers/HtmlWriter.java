@@ -1,6 +1,5 @@
 package util.writers;
 
-import http.http_response_builder.HttpResponseBuilder;
 import util.properties.FileFinder;
 
 import java.io.*;
@@ -39,7 +38,7 @@ public class HtmlWriter<T> implements Writer {
     @Override
     public String writeAndRead() {
         try {
-            file = fileFinder.findFileByName(DIR_NAME + fileName);
+            file = fileFinder.findFileInResourceByName(DIR_NAME + fileName);
             return write();
         } catch (IOException e) {
             throw new RuntimeException();

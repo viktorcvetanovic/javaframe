@@ -59,7 +59,7 @@ public class HttpParser implements HttpParserInterface {
     }
 
     private String[] getRequestLine() {
-        String[] httpRequestLine = requestString.split("\r\n")[0].split(" ");
+        String[] httpRequestLine = requestString.trim().split("\r\n")[0].split(" ");
         if (httpRequestLine.length != REQUEST_LINE_PARAMETER_COUNT) {
             throw new InvalidHttpRequestLineException("Your http request line doesnt have standard length");
         }

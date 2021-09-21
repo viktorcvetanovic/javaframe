@@ -15,7 +15,7 @@ public class Properties extends FileFinder {
 
     private String readProperties() {
         String propFileName = "app.properties";
-        InputStream inputStream = findFileByName(propFileName);
+        InputStream inputStream = findFileInResourceByName(propFileName);
         if (inputStream == null) {
             throw new InvalidPropertiesFileException("Your property file is not on good location or you haven't created it");
         }
