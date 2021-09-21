@@ -6,9 +6,8 @@ import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ClassUtil {
     private final Reflections reflections = new Reflections("", new SubTypesScanner(false));
@@ -21,6 +20,11 @@ public class ClassUtil {
                 .findFirst();
     }
 
+    public List<Class<?>> findAllClasses() {
+        return new ArrayList<>(reflections.getSubTypesOf(Object.class));
+    }
+
+    //TODO: refactor this
     public Optional<Class<?>> findFirstClassByAnnotationAndPath(Class<?> clazz, String path) {
         return reflections.getSubTypesOf(Object.class)
                 .stream()

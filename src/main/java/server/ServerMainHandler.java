@@ -3,10 +3,14 @@ package server;
 import data.ConfigProperty;
 import enums.config.PropertyValue;
 import exception.server.InvalidServerConfigException;
+import lombok.RequiredArgsConstructor;
+import registry.ClassRegistry;
 import server.thread.WelcomeThread;
+import util.classutil.ClassUtil;
 import util.properties.Properties;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -14,18 +18,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServerMainHandler {
+    private final ClassUtil classUtil = new ClassUtil();
+    private final ClassRegistry classRegistry = new ClassRegistry(classUtil);
     private ServerSocket serverSocket;
     private List<Socket> connectedSocket;
     private Config config;
 
 
     private ServerMainHandler() {
+
+    }
+
+    private void config() {
         config = new Config();
         this.serverSocket = config.getServerSocket();
         connectedSocket = new ArrayList<>();
     }
 
-    private void config() throws IOException {
+    private void startServer() throws IOException {
         while (true) {
             var socket = this.serverSocket.accept();
             connectedSocket.add(socket);
@@ -33,9 +43,22 @@ public class ServerMainHandler {
         }
     }
 
+    private void loadClasses() {
+        classUtil.findAllClasses().stream().forEach(e -> {
+            try {
+                classRegistry.set(e);
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException invocationTargetException) {
+                invocationTargetException.printStackTrace();
+            }
+        });
+    }
+
     public static void run() {
+        var serverMainHandler = new ServerMainHandler();
         try {
-            new ServerMainHandler().config();
+            serverMainHandler.loadClasses();
+            serverMainHandler.config();
+            serverMainHandler.startServer();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
