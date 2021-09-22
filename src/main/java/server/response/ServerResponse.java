@@ -18,7 +18,7 @@ public class ServerResponse {
      public void writeMessageToServer(String message) {
         try {
             var bufferedOutputStream = new BufferedOutputStream(socket.getOutputStream());
-            var httpMessage = HttpResponseFacade.getHttpResponseForException(message);
+            var httpMessage = HttpResponseFacade.getHttpResponseForHtml(message);
             bufferedOutputStream.write(httpMessage.getBytes(StandardCharsets.UTF_8));
             bufferedOutputStream.flush();
             bufferedOutputStream.close();

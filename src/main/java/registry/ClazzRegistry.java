@@ -1,6 +1,8 @@
 package registry;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import util.classutil.ClassUtil;
 
@@ -10,9 +12,14 @@ import java.util.Map;
 import java.util.Set;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ClazzRegistry {
-    Map<Class<?>, Object> map = new HashMap<>();
+    private Map<Class<?>, Object> map = new HashMap<>();
+    private static ClazzRegistry instance=new ClazzRegistry();
+
+    public static ClazzRegistry getInstance(){
+        return instance;
+    }
 
     public Object get(Class<?> clazz) {
         return map.get(clazz);

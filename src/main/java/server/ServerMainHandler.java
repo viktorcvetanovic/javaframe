@@ -19,9 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServerMainHandler {
-    private final ClassUtil classUtil = new ClassUtil();
     private final ClassFinder classFinder = new ClassFinder();
-    private final ClazzRegistry classRegistry = new ClazzRegistry();
+    private final ClazzRegistry classRegistry = ClazzRegistry.getInstance();
     private ServerSocket serverSocket;
     private List<Socket> connectedSocket;
     private Config config;

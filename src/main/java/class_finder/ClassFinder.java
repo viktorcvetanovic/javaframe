@@ -19,7 +19,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ClassFinder implements ClassFinderInterface {
     private final Reflections reflections = new Reflections("", new SubTypesScanner(false));
-    private final ClazzRegistry classRegistry = new ClazzRegistry();
+    private final ClazzRegistry classRegistry = ClazzRegistry.getInstance();
 
     @Override
     public ControllerClazz findControllerClassByPathAndMethod(HttpRequest httpRequest) {

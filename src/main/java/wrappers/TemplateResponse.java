@@ -4,7 +4,6 @@ package wrappers;
 import util.writers.HtmlWriter;
 import util.writers.Writer;
 
-import java.util.Map;
 
 public class TemplateResponse {
     private final Writer htmlWriter = new HtmlWriter();
