@@ -1,10 +1,11 @@
 package server;
 
+import class_finder.ClassFinder;
 import data.ConfigProperty;
 import enums.config.PropertyValue;
 import exception.server.InvalidServerConfigException;
 import lombok.RequiredArgsConstructor;
-import registry.ClassRegistry;
+import registry.ClazzRegistry;
 import server.thread.WelcomeThread;
 import util.classutil.ClassUtil;
 import util.properties.Properties;
@@ -19,7 +20,8 @@ import java.util.List;
 
 public class ServerMainHandler {
     private final ClassUtil classUtil = new ClassUtil();
-    private final ClassRegistry classRegistry = new ClassRegistry(classUtil);
+    private final ClassFinder classFinder = new ClassFinder();
+    private final ClazzRegistry classRegistry = new ClazzRegistry();
     private ServerSocket serverSocket;
     private List<Socket> connectedSocket;
     private Config config;
@@ -44,7 +46,7 @@ public class ServerMainHandler {
     }
 
     private void loadClasses() {
-        classUtil.findAllClasses().stream().forEach(e -> {
+        classFinder.findAllLoadedClasses().forEach(e -> {
             try {
                 classRegistry.set(e);
             } catch (InvocationTargetException | InstantiationException | IllegalAccessException invocationTargetException) {

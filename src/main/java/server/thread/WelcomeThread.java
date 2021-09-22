@@ -21,9 +21,8 @@ public class WelcomeThread implements Runnable {
     public void run() {
         HttpHandler httpHandler = new HttpHandler();
         HttpRequest httpRequest = httpHandler.readHttpRequest(socket);
-
         ServiceHandler serviceHandler = new ServiceHandler();
-        StaticHandler staticHandler=new StaticHandler();
+        StaticHandler staticHandler = new StaticHandler();
         try {
             Object value = serviceHandler.handle(httpRequest);
             staticHandler.handle(httpRequest);

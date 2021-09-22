@@ -15,7 +15,7 @@ public class ServiceHandler {
 
     public Object handle(HttpRequest httpRequest) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         ClassFinderInterface classFinderInterface = new ClassFinder();
-        ControllerClazz classes = classFinderInterface.findClassByPathAndMethod(httpRequest);
+        ControllerClazz classes = classFinderInterface.findControllerClassByPathAndMethod(httpRequest);
         ClassHandler classHandler = new ClassHandler(classes, httpRequest);
         return classHandler.invokeMethodByClass();
     }

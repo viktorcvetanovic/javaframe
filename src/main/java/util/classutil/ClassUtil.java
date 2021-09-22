@@ -1,37 +1,11 @@
 package util.classutil;
 
-import annotations.Controller;
 import exception.controller.InvalidConstructorException;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ClassUtil {
-    private final Reflections reflections = new Reflections("", new SubTypesScanner(false));
-
-    public Optional<Class<?>> findFirstClassByAnnotation(Class<?> clazz) {
-
-        return reflections.getSubTypesOf(Object.class)
-                .stream()
-                .filter(e -> e.getAnnotation(Controller.class) != null)
-                .findFirst();
-    }
-
-    public List<Class<?>> findAllClasses() {
-        return new ArrayList<>(reflections.getSubTypesOf(Object.class));
-    }
-
-    //TODO: refactor this
-    public Optional<Class<?>> findFirstClassByAnnotationAndPath(Class<?> clazz, String path) {
-        return reflections.getSubTypesOf(Object.class)
-                .stream()
-                .filter(e -> e.getAnnotation(Controller.class) != null)
-                .filter(e -> path.startsWith(e.getAnnotation(Controller.class).path()))
-                .findFirst();
-    }
 
     public Optional<Constructor<?>> getAnyConstructor(Class<?> clazz) {
         return Arrays.stream(clazz.getConstructors()).findFirst();
@@ -49,7 +23,5 @@ public class ClassUtil {
         return clazz.getConstructors();
     }
 
-    public Set<Class<?>> getAllLoadedClasses() {
-        return reflections.getSubTypesOf(Object.class);
-    }
+
 }

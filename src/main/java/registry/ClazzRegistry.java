@@ -7,11 +7,11 @@ import util.classutil.ClassUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Data
 @RequiredArgsConstructor
-public class ClassRegistry {
-    private final ClassUtil classUtil;
+public class ClazzRegistry {
     Map<Class<?>, Object> map = new HashMap<>();
 
     public Object get(Class<?> clazz) {
@@ -19,8 +19,13 @@ public class ClassRegistry {
     }
 
     public void set(Class<?> clazz) throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        var obj = classUtil.getBestConstructor(clazz).newInstance();
+        var obj = new ClassUtil().getBestConstructor(clazz).newInstance();
         map.put(clazz, obj);
     }
+
+    public Set<Class<?>> getAllKeys() {
+        return map.keySet();
+    }
+
 
 }

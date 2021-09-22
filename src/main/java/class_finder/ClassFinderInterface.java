@@ -4,5 +4,5 @@ import data.ControllerClazz;
 import data.http.HttpRequest;
 
 public interface ClassFinderInterface {
-    ControllerClazz findClassByPathAndMethod(HttpRequest httpRequest);
+    ControllerClazz findControllerClassByPathAndMethod(HttpRequest httpRequest);
 }

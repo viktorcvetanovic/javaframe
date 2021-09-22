@@ -7,21 +7,25 @@ import enums.http.HttpMethod;
 import data.http.HttpRequest;
 import exception.controller.ClassNotFoundException;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
-import util.classutil.ClassUtil;
+import registry.ClazzRegistry;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 
 @Getter
+@RequiredArgsConstructor
 public class ClassFinder implements ClassFinderInterface {
-    private final ClassUtil classUtil = new ClassUtil();
+    private final Reflections reflections = new Reflections("", new SubTypesScanner(false));
+    private final ClazzRegistry classRegistry = new ClazzRegistry();
 
     @Override
-    public ControllerClazz findClassByPathAndMethod(HttpRequest httpRequest) {
+    public ControllerClazz findControllerClassByPathAndMethod(HttpRequest httpRequest) {
         String path = httpRequest.getHttpRequestLine().getPath();
         HttpMethod method = httpRequest.getHttpRequestLine().getMethod();
-        Optional<Class<?>> clazz = classUtil.findFirstClassByAnnotationAndPath(Controller.class, path);
+        Optional<Class<?>> clazz = findFirstControllerClassByPath(path);
 
         if (clazz.isPresent()) {
             var controllerPath = clazz.get().getAnnotation(Controller.class).path();
@@ -42,4 +46,23 @@ public class ClassFinder implements ClassFinderInterface {
     }
 
 
+    public Optional<Class<?>> findFirstClassByAnnotation(Class<? extends Annotation> clazz) {
+
+        return classRegistry.getAllKeys()
+                .stream()
+                .filter(e -> e.getAnnotation(clazz) != null)
+                .findFirst();
+    }
+
+    private Optional<Class<?>> findFirstControllerClassByPath(String path) {
+        return classRegistry.getAllKeys()
+                .stream()
+                .filter(e -> e.getAnnotation(Controller.class) != null)
+                .filter(e -> path.startsWith(e.getAnnotation(Controller.class).path()))
+                .findFirst();
+    }
+
+    public Set<Class<?>> findAllLoadedClasses() {
+        return reflections.getSubTypesOf(Object.class);
+    }
 }
