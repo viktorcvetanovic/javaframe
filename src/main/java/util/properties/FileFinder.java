@@ -1,7 +1,8 @@
 package util.properties;
 
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class FileFinder {
 
@@ -9,7 +10,11 @@ public class FileFinder {
         return FileFinder.class.getClassLoader().getResourceAsStream(name);
     }
 
-    public File findFileByPath(String path){
+    public File findFileByPath(String path) {
         return new File(path);
+    }
+
+    public String readFile(File file) throws IOException {
+        return Files.readString(Paths.get(file.getPath()));
     }
 }

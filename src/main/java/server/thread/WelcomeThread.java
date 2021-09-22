@@ -8,6 +8,7 @@ import http.http_response_builder.HttpResponseFacade;
 import lombok.AllArgsConstructor;
 import server.response.ServerResponse;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.util.Objects;
@@ -30,7 +31,7 @@ public class WelcomeThread implements Runnable {
                 serverResponse.writeMessageToServer(HttpResponseFacade.getHttpResponseFor404());
             }
             serverResponse.writeMessageToServer(HttpResponseFacade.getHttpResponseForHtml(serviceValue.toString()));
-        } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
+        } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException | IOException e) {
             serverResponse.writeMessageToServer(Objects.requireNonNull(HttpResponseFacade.getHttpResponseForException(e.getMessage())));
         }
     }
