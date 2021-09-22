@@ -1,6 +1,8 @@
 package server.thread;
 
 import data.http.HttpRequest;
+import exception.controller.ClassNotFoundException;
+import exception.server.FileNotFoundException;
 import handlers.http_handler.HttpHandler;
 import handlers.service_handler.ServiceHandler;
 import handlers.static_handler.StaticHandler;
@@ -25,14 +27,15 @@ public class WelcomeThread implements Runnable {
         ServiceHandler serviceHandler = new ServiceHandler();
         StaticHandler staticHandler = new StaticHandler();
         try {
-            Object serviceValue = serviceHandler.handle(httpRequest);
-            staticHandler.handle(httpRequest);
-            if (serviceValue == null) {
-                serverResponse.writeMessageToServer(HttpResponseFacade.getHttpResponseFor404());
+            Object value = serviceHandler.handle(httpRequest);
+            if (value == null) {
+                value = staticHandler.handle(httpRequest);
             }
-            serverResponse.writeMessageToServer(HttpResponseFacade.getHttpResponseForHtml(serviceValue.toString()));
-        } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException | IOException e) {
+            serverResponse.writeMessageToServer(HttpResponseFacade.getHttpResponseForHtml(value.toString()));
+        } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
             serverResponse.writeMessageToServer(Objects.requireNonNull(HttpResponseFacade.getHttpResponseForException(e.getMessage())));
+        } catch (ClassNotFoundException | FileNotFoundException ex) {
+            serverResponse.writeMessageToServer(HttpResponseFacade.getHttpResponseFor404());
         }
     }
 
