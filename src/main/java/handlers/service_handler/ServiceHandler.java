@@ -5,11 +5,9 @@ import class_finder.ClassFinderInterface;
 import class_finder.ClassHandler;
 import data.ControllerClazz;
 import data.http.HttpRequest;
-import lombok.Data;
 
 import java.lang.reflect.InvocationTargetException;
 
-@Data
 public class ServiceHandler {
 
 
