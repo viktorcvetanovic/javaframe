@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import registry.ClazzRegistry;
 import server.thread.WelcomeThread;
 import util.classutil.ClassUtil;
+import util.null_checker.NullUtil;
 import util.properties.Properties;
 
 import java.io.IOException;
@@ -54,10 +55,16 @@ public class ServerMainHandler {
         });
     }
 
+    //TODO: implement autowire
+    private void instanceClasses() {
+
+    }
+
     public static void run() {
         var serverMainHandler = new ServerMainHandler();
         try {
             serverMainHandler.loadClasses();
+            serverMainHandler.instanceClasses();
             serverMainHandler.config();
             serverMainHandler.startServer();
         } catch (Exception ex) {
@@ -73,18 +80,9 @@ public class ServerMainHandler {
         public ServerSocket getServerSocket() {
             try {
                 List<ConfigProperty> configPropertyList = properties.getProperties();
-                var serverIp = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_IP, configPropertyList).getPropertyValue();
-                var serverPort = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_PORT, configPropertyList).getPropertyValue();
-                var serverBackLog = properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_BACKLOG, configPropertyList).getPropertyValue();
-                if (serverIp == null) {
-                    serverIp = "localhost";
-                }
-                if (serverPort == null) {
-                    serverPort = "8080";
-                }
-                if (serverBackLog == null) {
-                    serverBackLog = "80";
-                }
+                var serverIp = NullUtil.orElseGet(properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_IP, configPropertyList).getPropertyValue(), "localhost");
+                var serverPort = NullUtil.orElseGet(properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_PORT, configPropertyList).getPropertyValue(), "8080");
+                var serverBackLog = NullUtil.orElseGet(properties.filterPropertyByPropertyEnum(PropertyValue.SERVER_BACKLOG, configPropertyList).getPropertyValue(), "80");
                 return new ServerSocket(Integer.parseInt(serverPort), Integer.parseInt(serverBackLog), InetAddress.getByName(serverIp));
             } catch (IOException e) {
                 throw new InvalidServerConfigException("Check your server configuration");

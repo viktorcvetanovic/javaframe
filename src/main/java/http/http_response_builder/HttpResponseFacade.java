@@ -28,10 +28,11 @@ public class HttpResponseFacade {
                 .build();
     }
 
-    public static String getHttpResponseFor404() {
+    public static String getHttpResponseFor404(String message) {
         return HttpResponseBuilder
                 .getBuilder()
                 .withHttpCode(HttpCode.NOT_FOUND)
+                .withBody(message)
                 .build();
     }
 

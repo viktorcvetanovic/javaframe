@@ -15,7 +15,6 @@ import registry.ClazzRegistry;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-@Getter
 @RequiredArgsConstructor
 public class ClassFinder implements ClassFinderInterface {
     private final Reflections reflections = new Reflections("", new SubTypesScanner(false));

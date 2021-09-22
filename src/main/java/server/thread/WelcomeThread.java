@@ -35,7 +35,7 @@ public class WelcomeThread implements Runnable {
         } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
             serverResponse.writeMessageToServer(Objects.requireNonNull(HttpResponseFacade.getHttpResponseForException(e.getMessage())));
         } catch (ClassNotFoundException | FileNotFoundException ex) {
-            serverResponse.writeMessageToServer(HttpResponseFacade.getHttpResponseFor404());
+            serverResponse.writeMessageToServer(HttpResponseFacade.getHttpResponseFor404(ex.getMessage()));
         }
     }
 
