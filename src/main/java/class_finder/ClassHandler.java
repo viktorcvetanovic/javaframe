@@ -36,12 +36,13 @@ public class ClassHandler {
                     .filter(e -> e.getAnnotation(RequestHandler.class).path().equals(controllerClazz.getMethodPath()))
                     .filter(e -> e.getAnnotation(RequestHandler.class).method() == controllerClazz.getHttpMethod())
                     .findFirst();
-            if (method.isPresent()) {
 
+            if (method.isPresent()) {
                 Set<Object> parameterValues = decideMethodParametersByAnnotation(httpRequest, method.get());
                 if (!parameterValues.isEmpty()) {
                     returnValue = method.get().invoke(controllerInstance, parameterValues.toArray());
                 }
+                returnValue=method.get().invoke(controllerInstance);
             }
         return returnValue;
     }
