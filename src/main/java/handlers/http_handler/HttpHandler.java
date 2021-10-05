@@ -6,7 +6,6 @@ import http.http_parser.HttpParser;
 import http.http_parser.HttpParserInterface;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 

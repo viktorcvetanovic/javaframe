@@ -39,7 +39,6 @@ public class ClassHandler {
 
             if (method.isPresent()) {
                 Set<Object> parameterValues = decideMethodParametersByAnnotation(httpRequest, method.get());
-                System.out.println(parameterValues);
                 if (parameterValues.isEmpty()) {
                     returnValue=method.get().invoke(controllerInstance);
                 }

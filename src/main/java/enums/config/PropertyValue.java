@@ -1,7 +1,7 @@
 package enums.config;
 
 public enum PropertyValue {
-    SERVER_IP, SERVER_PORT, SERVER_BACKLOG;
+    SERVER_IP, SERVER_PORT, SERVER_BACKLOG, STATIC_CONTENT;
 
 
     public static PropertyValue convertStringToEnum(String s) {
@@ -12,6 +12,8 @@ public enum PropertyValue {
                 return SERVER_PORT;
             case "server_backlog":
                 return SERVER_BACKLOG;
+            case "static_contect":
+                return STATIC_CONTENT;
             default:
                 return null;
         }

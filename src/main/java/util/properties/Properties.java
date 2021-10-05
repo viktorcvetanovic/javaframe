@@ -46,7 +46,7 @@ public class Properties extends FileFinder {
     }
 
     public ConfigProperty filterPropertyByPropertyEnum(PropertyValue propertyValue, List<ConfigProperty> properties) {
-        return properties.stream().filter(e -> e.getPropertyName() == propertyValue).findFirst().orElse(null);
+        return properties.stream().filter(e -> e.getPropertyName() == propertyValue).findFirst().orElse(new ConfigProperty());
 
     }
 }

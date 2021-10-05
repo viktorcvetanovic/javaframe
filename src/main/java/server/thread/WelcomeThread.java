@@ -10,7 +10,6 @@ import http.http_response_builder.HttpResponseFacade;
 import lombok.AllArgsConstructor;
 import server.response.ServerResponse;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.util.Objects;
