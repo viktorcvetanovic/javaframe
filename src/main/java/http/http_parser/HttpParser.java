@@ -28,10 +28,10 @@ public class HttpParser implements HttpParserInterface {
         var headerArray = getHeaderArray();
         String body = getBody(mapRequestLineFromStringArray(requestLine));
         if (body != null) {
-            JsonParserInterface jsonParserInterface = new JsonParser();
+            JsonParserInterface jsonParserInterface = new JsonParser(body);
             return new HttpRequest(mapRequestLineFromStringArray(requestLine),
                     mapHttpJsonFromStringArray(headerArray),
-                    mapMapToHttpHeader(jsonParserInterface.parseJson(body)), mapPathParamsFromRequestLine(requestLine));
+                    mapMapToHttpHeader(jsonParserInterface.parseJson().getMap()), mapPathParamsFromRequestLine(requestLine));
         }
         return new HttpRequest(mapRequestLineFromStringArray(requestLine),
                 mapHttpJsonFromStringArray(headerArray), null, mapPathParamsFromRequestLine(requestLine));
@@ -111,7 +111,7 @@ public class HttpParser implements HttpParserInterface {
                 new HttpKeyValue(e.split(":")[0], e.split(":")[1])).collect(Collectors.toList());
     }
 
-    private List<HttpKeyValue> mapMapToHttpHeader(Map<Object, Object> map) {
+    private List<HttpKeyValue> mapMapToHttpHeader(Map<String, Object> map) {
         List<HttpKeyValue> list = new ArrayList<>();
         for (Map.Entry entry : map.entrySet()) {
             list.add(new HttpKeyValue(String.valueOf(entry.getKey()), String.valueOf(entry.getValue())));

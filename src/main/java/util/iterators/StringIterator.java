@@ -1,9 +1,11 @@
 package util.iterators;
 
+import lombok.Data;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
-
+@Data
 public class StringIterator implements Iterator<String> {
     private String data;
     private int length;
@@ -16,7 +18,7 @@ public class StringIterator implements Iterator<String> {
 
     @Override
     public boolean hasNext() {
-        return index < length;
+        return index < length-1;
     }
 
     @Override
@@ -58,5 +60,7 @@ public class StringIterator implements Iterator<String> {
     public String eatWord() {
         return eatWhile(ch -> !ch.isBlank());
     }
+
+
 
 }

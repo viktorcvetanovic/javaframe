@@ -1,105 +1,129 @@
 package http.json_parser;
 
-import exception.json.InvalidJsonFormatException;
-import lombok.NonNull;
+import util.iterators.StringIterator;
 
 import java.util.*;
 
 
-public class JsonParser implements JsonParserInterface {
+public class JsonParser extends StringIterator implements JsonParserInterface {
 
-    private String jsonString;
-    private Map<Object, Object> map = new HashMap<>();
-    private Iterator<Character> iterator;
+    private final JsonObject jsonObject = new JsonObject();
+
+    public JsonParser(String data) {
+        super(data);
+    }
+
 
     @Override
-    public Map<Object, Object> parseJson(@NonNull String json) {
-        this.jsonString = json.trim();
-        validateJson();
-        var keyOrValue = true;
-        var keyBuilder = new StringBuilder();
-        var valueBuilder = new StringBuilder();
-        var state = 0;
-        List<Object> list = new ArrayList<>();
-        //glavna logika mora da se odvija ovde, mora da postoje metode koje ce da vracaju elemente koji se dodaju u Mapu u zavisnosti koji je tip.
-        initializeIterator();
-        while (iterator.hasNext()) {
-            var current = iterator.next();
-            if (current == ' ' || current == '"') {
-                continue;
+    public JsonObject parseJson() {
+        eatWhitespace();
+        while (hasNext()) {
+            Map<String, Object> entry = mapToEntry();
+            if (entry != null) {
+                jsonObject.addMap(entry);
+            }else{
+                next();
             }
+        }
+        return jsonObject;
+    }
 
-            if (current == '{') {
-                state = 0;
-                continue;
-            }
-            if (current == ':') {
-                keyOrValue = false;
-                continue;
-            }
-            if (current == '[') {
-                state = 1;
-                continue;
-            }
-
-
-            if (state == 0) {
-                if (current == '}') {
-                    map.put(keyBuilder.toString(), valueBuilder.toString());
-                    state = 1;
-                    continue;
-                }
-                if (current == ',') {
-                    keyOrValue = true;
-                    if (!keyBuilder.toString().equals("")) {
-                        map.put(keyBuilder.toString(), valueBuilder.toString());
-                    }
-                    valueBuilder.setLength(0);
-                    keyBuilder.setLength(0);
-                    continue;
-                }
-            }
-            if (state == 1) {
-                if (current == ',') {
-                    list.add(valueBuilder.toString());
-                    valueBuilder.setLength(0);
-                    continue;
-                }
-                if (current == ']') {
-                    list.add(valueBuilder.toString());
-                    map.put(keyBuilder.toString(), list);
-                    valueBuilder.setLength(0);
-                    keyBuilder.setLength(0);
-                    list = new ArrayList<>();
-                    state = 0;
-                    continue;
-                }
-            }
-            if (keyOrValue) {
-                keyBuilder.append(current);
+    private Map<String, Object> mapToEntry() {
+        eatWhitespace();
+        if (isString()) {
+            String key;
+            Object value;
+            next();
+            key = eatWhileKey();
+            next();
+            if (isValue()) {
+                next();
+                value = eatWhileValue();
             } else {
-                valueBuilder.append(current);
+                throw new RuntimeException("Invalid json at index:" + getIndex());
+            }
+            Map<String,Object> map=new HashMap<>();
+            map.put(key,value);
+            return map;
+        }
+        return null;
+    }
+
+
+    private boolean isString() {
+        return peek().equals("\"");
+    }
+
+    private String eatWhileKey() {
+        return eatWhile(e -> !e.equals("\""));
+    }
+
+    private boolean isNumber() {
+        return peek().matches("[0-9]");
+    }
+
+    private String eatKeyWord() {
+        return eatWhile(e -> !e.matches("[,}]"));
+    }
+
+    private boolean isObject() {
+        return peek().equals("{");
+    }
+
+    private boolean isArray() {
+        return peek().equals("[");
+    }
+
+    private List<Object> eatArray() {
+        List<Object> list = new ArrayList<>();
+        while (!peek().equals("]")) {
+            list.add(eatWhileValue());
+        }
+        return list;
+    }
+
+
+    private boolean isValue() {
+        return peek().equals(":");
+    }
+
+    //switch
+    private Object eatWhileValue() {
+        if (peek().equals(",")) {
+            next();
+        }
+        if (isString()) {
+            next();
+            String value = eatWhile(e -> !e.equals("\""));
+            next();
+            return value;
+        } else if (isNumber()) {
+            String strNumber = eatWhile(e -> e.matches("[0-9]"));
+            try {
+                return Integer.parseInt(strNumber);
+            } catch (Exception ex) {
+                return Float.parseFloat(strNumber);
+            }
+        } else if (isObject()) {
+            next();
+            return mapToEntry();
+        } else if (isArray()) {
+            next();
+            return eatArray();
+        } else {
+            String s = eatKeyWord();
+            if (s.equals("null")) {
+                return null;
+            }
+            if (s.equals("true")) {
+                return true;
+            }
+            if (s.equals("false")) {
+                return false;
             }
         }
-
-        return map;
+        throw new RuntimeException("Character at line: "+getIndex()+" is not valid");
     }
-
-
-    private void validateJson() {
-        if ((this.jsonString.charAt(0) != '{' || jsonString.charAt(jsonString.length() - 1) != '}')
-                && (this.jsonString.charAt(0) != '[' || jsonString.charAt(jsonString.length() - 1) != ']')) {
-            throw new InvalidJsonFormatException("Your Json is not valid");
-        }
-    }
-
-    private void initializeIterator() {
-        List<Character> characterList = new ArrayList<>();
-        for (char c : this.jsonString.toCharArray()) {
-            characterList.add(c);
-        }
-        this.iterator = characterList.iterator();
-    }
-
 
 }
+
