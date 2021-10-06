@@ -18,17 +18,17 @@ public class JsonParser extends StringIterator implements JsonParserInterface {
     public JsonObject parseJson() {
         eatWhitespace();
         while (hasNext()) {
-            Map<String, Object> entry = mapToEntry();
+            Map<String, Object> entry = mapJson();
             if (entry != null) {
                 jsonObject.addMap(entry);
-            }else{
+            } else {
                 next();
             }
         }
         return jsonObject;
     }
 
-    private Map<String, Object> mapToEntry() {
+    private Map<String, Object> mapJson() {
         eatWhitespace();
         if (isString()) {
             String key;
@@ -42,8 +42,8 @@ public class JsonParser extends StringIterator implements JsonParserInterface {
             } else {
                 throw new RuntimeException("Invalid json at index:" + getIndex());
             }
-            Map<String,Object> map=new HashMap<>();
-            map.put(key,value);
+            Map<String, Object> map = new HashMap<>();
+            map.put(key, value);
             return map;
         }
         return null;
@@ -78,6 +78,14 @@ public class JsonParser extends StringIterator implements JsonParserInterface {
         List<Object> list = new ArrayList<>();
         while (!peek().equals("]")) {
             list.add(eatWhileValue());
+            //----------CHECK THIS----------
+            if (!peek().equals("]")) {
+                if (peek().equals(",")) {
+                    next();
+                } else {
+                    throw new RuntimeException("Next must be seperated with comma at index:" + getIndex());
+                }
+            }
         }
         return list;
     }
@@ -89,9 +97,7 @@ public class JsonParser extends StringIterator implements JsonParserInterface {
 
     //switch
     private Object eatWhileValue() {
-        if (peek().equals(",")) {
-            next();
-        }
+
         if (isString()) {
             next();
             String value = eatWhile(e -> !e.equals("\""));
@@ -106,7 +112,7 @@ public class JsonParser extends StringIterator implements JsonParserInterface {
             }
         } else if (isObject()) {
             next();
-            return mapToEntry();
+            return mapJson();
         } else if (isArray()) {
             next();
             return eatArray();
@@ -122,7 +128,7 @@ public class JsonParser extends StringIterator implements JsonParserInterface {
                 return false;
             }
         }
-        throw new RuntimeException("Character at line: "+getIndex()+" is not valid");
+        throw new RuntimeException("Character at line: " + getIndex() + " is not valid");
     }
 
 }
