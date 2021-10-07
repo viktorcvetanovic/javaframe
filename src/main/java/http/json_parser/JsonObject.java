@@ -1,11 +1,12 @@
 package http.json_parser;
 
-import lombok.Data;
+
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
+@ToString
 public class JsonObject {
 
     private Map<String, Object> map = new HashMap<>();

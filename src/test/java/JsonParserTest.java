@@ -1,19 +1,18 @@
-import http.json_parser.JsonObject;
 import http.json_parser.JsonParser;
 import http.json_parser.JsonParserInterface;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class JsonParserTest {
-
+//resiti problem ako su dva kljuca s istim imenom
+    //problem kod parsovanja liste objekata
 
     @Test
     public void testJsonParserWithString() {
-        var data = "{" + "\"viktor\"" + ":" + "\"car\"" + "}";
+        var data = "{" + "\"viktor\"" + ":" + "\"car\"" + "," + "\"viktor1\"" + ":" + "\"car\"" + "," + "\"viktor2\"" + ":" + "\"car\"" + "}";
         JsonParserInterface jsonParserInterface = new JsonParser(data);
         Map<String, Object> map = jsonParserInterface.parseJson().getMap();
         assertEquals("car", map.get("viktor"));
@@ -43,57 +42,53 @@ public class JsonParserTest {
 
     @Test
     public void testJsonParserWithBoolean() {
-        var data = "{" + "\"true\"" + ":" + "true" + ","+"\"false\""+":"+"false"+"}";
+        var data = "{" + "\"true\"" + ":" + "true" + "," + "\"false\"" + ":" + "false" + "}";
         JsonParserInterface jsonParserInterface = new JsonParser(data);
         Map<String, Object> map = jsonParserInterface.parseJson().getMap();
         assertEquals(true, map.get("true"));
-        assertEquals(false,map.get("false"));
+        assertEquals(false, map.get("false"));
         System.out.println(map);
     }
-
 
 
     @Test
     public void testJsonParserWithBooleanAndString() {
-        var data = "{" + "\"true\"" + ":" + "true" + ","+"\"false\""+":"+"\"aaaa\""+"}";
+        var data = "{" + "\"true\"" + ":" + "true" + "," + "\"false\"" + ":" + "\"aaaa\"" + "}";
         JsonParserInterface jsonParserInterface = new JsonParser(data);
         Map<String, Object> map = jsonParserInterface.parseJson().getMap();
         assertEquals(true, map.get("true"));
-        assertEquals("aaaa",map.get("false"));
+        assertEquals("aaaa", map.get("false"));
         System.out.println(map);
     }
 
 
     @Test
-    public void testJsonParserWithObject(){
-        var data = "{" + "\"true\"" + ":" + "true" + ","+"\"obj\""+":"+"{"+"\"kayn\""+ ":"+"\"proba\"" +"}"+"}";
+    public void testJsonParserWithObject() {
+        var data = "{" + "\"true\"" + ":" + "true" + "," + "\"obj\"" + ":" + "{" + "\"kayn\"" + ":" + "\"proba\""+ "," +"\"aaafsafsa\"" +":"+ "{"+"\"onako\"" +":"+"5" +"}" + "}" +"\"obj2\"" + ":" + "{" + "\"kayn\"" + ":" + "\"proba\"" + "}" + "}";
         JsonParserInterface jsonParserInterface = new JsonParser(data);
         Map<String, Object> map = jsonParserInterface.parseJson().getMap();
-        Map<String,Object> testMap=Map.of("kayn","proba");
-        assertEquals(testMap,map.get("obj"));
-        assertEquals(true,map.get("true"));
+        Map<String, Object> testMap = Map.of("kayn", "proba");
+        assertEquals(testMap, map.get("obj"));
+        assertEquals(true, map.get("true"));
         System.out.println(map);
     }
-
 
 
     @Test
-    public void testJsonParserWithArray(){
-        var data = "{" + "\"true\"" + ":" + "true" + ","+"\"obj\""+":"+"["+"\"kayn\""+ ","+"\"proba\"" +"]"+"}";
+    public void testJsonParserWithArray() {
+        var data = "{" + "\"true\"" + ":" + "true" + "," + "\"obj\"" + ":" + "[" + "\"kayn\"" + "," + "\"proba\"" + "]" + "}";
         JsonParserInterface jsonParserInterface = new JsonParser(data);
         Map<String, Object> map = jsonParserInterface.parseJson().getMap();
         System.out.println(map);
     }
 
-//
+    @Test
+    public void testJsonParserWithArrayOfObject() {
+        var data = "{" + "\"true\"" + ":" + "true" + "," + "\"obj\"" + ":" + "[" + "{" + "\"kayn\"" + ":" + "\"proba\"" + "," + "\"viki\"" + ":" + "\"aaaaaa\"" + "}"+"," + "{" + "\"kayn\"" + ":" + "\"proba\"" + "}" + "]" + "}";
+        JsonParserInterface jsonParserInterface = new JsonParser(data);
+        Map<String, Object> map = jsonParserInterface.parseJson().getMap();
+        System.out.println(map);
+    }
 
-//    @Test
-//    public void testJsonParserWithArray2() {
-//        var data = "{list:[" + "viktor" + "," + "car" + "]}";
-//        Map<Object, Object> map = jsonParserInterface.parseJson(data);
-//        List<String> list = (List<String>) map.get("list");
-//        assertEquals("viktor", list.get(0));
-//        assertEquals("car", list.get(1));
-//    }
 
 }

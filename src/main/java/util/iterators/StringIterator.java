@@ -62,5 +62,9 @@ public class StringIterator implements Iterator<String> {
     }
 
 
+    public String getData(){
+        return data;
+    }
+
 
 }

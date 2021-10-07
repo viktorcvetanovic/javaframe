@@ -70,6 +70,7 @@ public class ClassHandler {
     }
 
     private <T> T checkIfObjectMatchTypeForBody(List<HttpKeyValue> body, Parameter parameter) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+        System.out.println(body);
         Field[] fields = parameter.getType().getDeclaredFields();
         Object obj = null;
             obj = parameter.getType().getDeclaredConstructor().newInstance();
