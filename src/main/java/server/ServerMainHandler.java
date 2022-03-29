@@ -1,13 +1,17 @@
 package server;
 
+import annotations.Wired;
 import class_finder.ClassFinder;
 
 import config.Config;
 import registry.ClazzRegistry;
 import server.thread.WelcomeThread;
+import util.classutil.ClassUtil;
 
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -57,8 +61,22 @@ public class ServerMainHandler {
     }
 
     //TODO: implement autowire
-    private void instanceClasses() {
+    private void instanceClasses() throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        for (Class<?> clazz : classRegistry.getAllKeys()) {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.isAnnotationPresent(Wired.class)) {
+                    if(field.getClass().isInterface()){
+                        Class<?>[] clazzes=field.getClass().getClasses();
+                        Constructor<?> constructor = new ClassUtil().getBestConstructor(clazzes[0]);
+                        field.set(field.getClass(),constructor.newInstance());
+                    }else{
+                        Constructor<?> constructor = new ClassUtil().getBestConstructor(field.getClass());
+                        field.set(field.getClass(), constructor.newInstance());
+                    }
+                }
+            }
 
+        }
     }
 
     public static void run() {
